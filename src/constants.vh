@@ -1,15 +1,16 @@
-`define _CACHE_SIZE 1
-`define _CACHE_PAYLOAD_SIZE 1
-`define _CACHE_PAYLOAD {8'd0, 8'd1,8'd0, 8'd1,8'd0, 8'd1,8'd0, 8'd1}
-`define __CACHE_PAYLOAD 1
+`define _CACHE_SIZE 'd1
+`define _CACHE_TYPE x
 
-`define _DATA_CACHE_SIZE 0x100
-`define _DATA_CACHE_PAYLOAD_SIZE 0x1c
-`define _DATA_CACHE_PAYLOAD {16'd4, 16'd4}
-
-`define _INST_CACHE_SIZE
-`define _INST_CACHE_PAYLOAD_SIZE
-`define _INST_CACHE_PAYLOAD
+`define _CACHE_TYPE_DATA 'd0
+`define _DATA_CACHE_SIZE 'h100
+`define _DATA_CACHE_PAYLOAD mem_cell[0] <= 1; \
+                            mem_cell[0] <= 1; \
+                            mem_cell[0] <= 1;
+`define _CACHE_TYPE_INST 'd1
+`define _INST_CACHE_SIZE 'h1ec
+`define _INST_CACHE_PAYLOAD mem_cell[0] <= 1; \
+                            mem_cell[0] <= 1; \
+                            mem_cell[0] <= 1;
 
 
 
