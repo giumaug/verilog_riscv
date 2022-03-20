@@ -1,7 +1,10 @@
+`ifndef CACHE           
+`define CACHE
 `include "constants.vh"
+`endif
 
 module cache #(parameter CACHE_SIZE =  `_CACHE_SIZE, 
-               parameter CACHE_TYPE =  `_CACHE_TYPE_DATA)
+               parameter CACHE_TYPE =  `_DATA_CACHE_TYPE)
              (input rst,
               input[31:0] address,
               input[31:0] i_val,
@@ -11,9 +14,9 @@ module cache #(parameter CACHE_SIZE =  `_CACHE_SIZE,
 	reg[31:0] mem_cell[CACHE_SIZE:0];
 
 	always@(rst) begin
-		if (rst == 1 && CACHE_TYPE == `_CACHE_TYPE_DATA) begin
+		if (rst == 1 && CACHE_TYPE == `_DATA_CACHE_TYPE) begin
 		    `_DATA_CACHE_PAYLOAD
-		end else if (rst == 1 && CACHE_TYPE == `_CACHE_TYPE_INST) begin
+		end else if (rst == 1 && CACHE_TYPE == `_INST_CACHE_TYPE) begin
 			`_INST_CACHE_PAYLOAD
 		end
 	end
@@ -23,7 +26,7 @@ module cache #(parameter CACHE_SIZE =  `_CACHE_SIZE,
 			o_val <= mem_cell[address];
 		end else if (op_type == 1) begin
 			mem_cell[address] <= i_val;
-			o_val <= 31'X; come faccio???
+			o_val <= 31'bx;
 		end
 	end
 endmodule

@@ -17,14 +17,14 @@
 //    end
 //endmodule
 
-module if_id(input clk,
+module if_id(input rst,
+			 input clk,
 			 input[31:0] i_pc,
 			 input[31:0] i_instr,
              output reg[31:0] pc,
              output reg[31:0] instr);
            
-	always @(posedge(clk))
-    begin
+	always @(posedge(clk)) begin
 		pc <= i_pc;
 		instr <= i_instr;
     end
@@ -37,9 +37,9 @@ module id_ex(input clk,
 			 input [4:0]  i_rd_num,
 			 input [11:0] i_imm_12,
 			 input [19:0] i_imm_20,
-			 input [6:0] i_pcode,
+			 input [6:0] i_opcode,
 			 input [2:0] i_func_3,
-			 input [6:0] i_func_7		
+			 input [6:0] i_func_7,		
 			 output reg[31:0] pc,
 			 output reg[31:0] rs_1,
 			 output reg[31:0] rs_2,
@@ -50,11 +50,10 @@ module id_ex(input clk,
 			 output reg[2:0] func_3,
 			 output reg[6:0] func_7);
 			 
-	always @(posedge(clk))
-    begin
+	always @(posedge(clk)) begin
 		pc <= i_pc;
-		rs1 <= i_rs1;
-		rs2 <= i_rs_2;
+		rs_1 <= i_rs_1;
+		rs_2 <= i_rs_2;
 		rd_num <= i_rd_num;
 		imm_12 <= i_imm_12;
 	  	imm_20 <= i_imm_20;
@@ -64,9 +63,8 @@ module id_ex(input clk,
     end
 endmodule
 
-
-
-module ex_mem(input[31:0] i_rs_1,
+module ex_mem(input clk,
+			  input[31:0] i_rs_1,
               input[31:0] i_rs_2,
               input[4:0] i_rd_num,
               input[31:0] i_alu_out,
@@ -81,8 +79,7 @@ module ex_mem(input[31:0] i_rs_1,
               output reg[2:0] func_3,
               output reg op_type);
               
-	always @(posedge(clk))
-    begin
+	always @(posedge(clk)) begin
 		rs_1 <= i_rs_1;
         rs_2 <= i_rs_2;
         rd_num <= i_rd_num;
@@ -93,7 +90,8 @@ module ex_mem(input[31:0] i_rs_1,
     end
 endmodule
               
-module mem_wb(input[31:0] i_mem_out,         
+module mem_wb(input clk,
+			  input[31:0] i_mem_out,         
               input[4:0] i_rd_num,
               input[31:0] i_alu_out,
               input i_op_type,
@@ -102,8 +100,7 @@ module mem_wb(input[31:0] i_mem_out,
               output reg[31:0] alu_out,
               output reg op_type);
               
-	always @(posedge(clk))
-    begin
+	always @(posedge(clk)) begin
 		mem_out <= i_mem_out;     
         rd_num <= i_rd_num;
         alu_out <= i_alu_out;

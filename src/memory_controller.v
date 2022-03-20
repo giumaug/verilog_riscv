@@ -1,14 +1,35 @@
-module memory_controller(input[31:0] address_1,
+`ifndef MEMORY_CONTROLLER           
+`define MEMORY_CONTROLLER 
+`include "constants.vh"
+`include "cache.v"
+`endif
+
+module memory_controller(input rst,
+                         input[31:0] address_0,
+                         input[31:0] i_val_0,
+                         input op_type_0,
+					     input[31:0] address_1,
                          input[31:0] i_val_1,
                          input op_type_1,
-					     input[31:0] address_2,
-                         input[31:0] i_val_2,
-                         input op_type_2,
-                         output[31:0] o_val_1,
-						 output[31:0] o_val_2);
+                         output[31:0] o_val_0,
+						 output[31:0] o_val_1);
 
-	always @(...)
-    begin
+	//data cache
+	cache #(.CACHE_SIZE(`_DATA_CACHE_SIZE), 
+            .CACHE_TYPE(`_DATA_CACHE_TYPE))
+            cache_0(.rst(rst),
+                     .address(address_0),
+                     .i_val(i_val_0),
+                     .op_type(op_type_0),
+					 .o_val(o_val_0));
 
-	end
+    //instruction cache
+	cache #(.CACHE_SIZE(`_INST_CACHE_SIZE), 
+            .CACHE_TYPE(`_INST_CACHE_TYPE))
+            cache_1(.rst(rst),
+                     .address(address_1),
+                     .i_val(i_val_1),
+                     .op_type(op_type_1),
+					 .o_val(o_val_1));
+
 endmodule     
