@@ -14,11 +14,12 @@ module top();
 
 	initial begin
 		clk <= 0;
-		rst <= 0;
+		rst <= 1;
 		counter <= 0;
 	end
 
 	always @(posedge(clk)) begin
+	    if (rst == 1) rst <= 0;
 		counter <= counter + 1;
 		if (counter == 5) $finish();
     end
