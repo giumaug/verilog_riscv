@@ -15,12 +15,14 @@ module stage_1(input rst,
 	
 	always@(rst) begin
 		pc <= `BOOT_ADDRESS;
+		$display("reset stage_1");
 	end
 
 	always@(posedge clk) begin
 		$display("---begin fetch---");
 		if (stall == 0) begin
 			if (b_taken == 1) begin
+			    $display("sssssssssssssssssssssssssssssssssssss");
 				pc <= b_pc;
 				if_id_pc <= 0;
 				if_id_instr <= 0;
