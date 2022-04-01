@@ -13,8 +13,6 @@ module verilog_riscv(input rst,
 	wire[31:0] if_id_pc_wire;
 	wire[31:0] if_id_instr_wire;
 
-    wire tmp_stall;
-	wire tmp_b_taken;
 	wire[31:0] tmp_b_pc;
 
 	wire[31:0] tmp_if_id_pc;
@@ -37,8 +35,8 @@ module verilog_riscv(input rst,
 
 	stage_1 stage_1_0(.rst(rst),
                       .clk(clk),
-                      .stall(tmp_stall),
-                      .b_taken(b_taken),
+                      .stall(1'b0),
+                      .b_taken(1'b0),
                       .instr(mem_con_o_val_1),
                       .b_pc(tmp_b_pc),
                       .pc(mem_con_address_1),
