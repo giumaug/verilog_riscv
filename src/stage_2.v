@@ -2,7 +2,7 @@
 `define STAGE_1
 `include "constants.vh"
 `endif
-ddd
+
 module stage_2(input rst,
                input clk,
 			   input stall,
