@@ -1,7 +1,8 @@
 `ifndef MEMORY_CONTROLLER           
 `define MEMORY_CONTROLLER 
 `include "constants.vh"
-`include "cache.v"
+`include "inst_cache.v"
+`include "data_cache.v"
 `endif
 
 module memory_controller(input rst,
@@ -15,23 +16,21 @@ module memory_controller(input rst,
 						 output[31:0] o_val_1);
 
 	//data cache
-	cache #(.CACHE_SIZE(`_DATA_CACHE_SIZE), 
-            .CACHE_TYPE(`_DATA_CACHE_TYPE),
+	data_cache #(.CACHE_SIZE(`_DATA_CACHE_SIZE), 
             .CACHE_OFFSET(`_DATA_CACHE_OFFSET))
-            cache_0(.rst(rst),
-                     .address(address_0),
-                     .i_val(i_val_0),
-                     .op_type(op_type_0),
-					 .o_val(o_val_0));
+            data_cache_0(.rst(rst),
+                         .address(address_0),
+                         .i_val(i_val_0),
+                         .op_type(op_type_0),
+					     .o_val(o_val_0));
 
     //instruction cache
-	cache #(.CACHE_SIZE(`_INST_CACHE_SIZE), 
-            .CACHE_TYPE(`_INST_CACHE_TYPE),
+	inst_cache #(.CACHE_SIZE(`_INST_CACHE_SIZE), 
 			.CACHE_OFFSET(`_INST_CACHE_OFFSET))
-            cache_1(.rst(rst),
-                     .address(address_1),
-                     .i_val(i_val_1),
-                     .op_type(op_type_1),
-					 .o_val(o_val_1));
+            inst_cache_0(.rst(rst),
+                         .address(address_1),
+                         .i_val(i_val_1),
+                         .op_type(op_type_1),
+					     .o_val(o_val_1));
 
 endmodule     

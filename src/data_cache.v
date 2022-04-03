@@ -1,11 +1,10 @@
-`ifndef CACHE           
-`define CACHE
+`ifndef DATA_CACHE           
+`define DATA_CACHE
 `include "constants.vh"
 `endif
 
-module cache #(parameter CACHE_SIZE =  `_CACHE_SIZE, 
-               parameter CACHE_TYPE =  `_CACHE_TYPE,
-			   parameter CACHE_OFFSET = `_CACHE_OFFSET)
+module data_cache #(parameter CACHE_SIZE =  `_DATA_CACHE_SIZE, 
+			   parameter CACHE_OFFSET = `_DATA_CACHE_OFFSET)
              (input rst,
               input[31:0] address,
               input[31:0] i_val,
@@ -15,13 +14,7 @@ module cache #(parameter CACHE_SIZE =  `_CACHE_SIZE,
 	reg[7:0] mem_cell[CACHE_SIZE:0];
 
 	always@(rst) begin
-	    $display("reset cache");
-		if (rst == 1 && CACHE_TYPE == `_DATA_CACHE_TYPE) begin
-		    `_DATA_CACHE_PAYLOAD
-		end else if (rst == 1 && CACHE_TYPE == `_INST_CACHE_TYPE) begin
-			`_INST_CACHE_PAYLOAD
-			$display("init inst cache");
-		end
+		`_DATA_CACHE_PAYLOAD
 	end
 
 	always@(op_type or address or i_val) begin
@@ -33,14 +26,8 @@ module cache #(parameter CACHE_SIZE =  `_CACHE_SIZE,
 			$display("--------------address is %0h ", address);
 			$display("--------------o_val is %0h ", o_val);
 		end else if (op_type == 1) begin
-			mem_cell[address - CACHE_OFFSET] <= i_val; //COME FACCIO VARIABILE REMPORANEA IN VERILOG???????????????????????
+			mem_cell[address - CACHE_OFFSET] <= i_val; //IS IT POSSIBLE TO HAVE A TMP VARIABLE?
             o_val <= 31'bx;
 		end
 	end
 endmodule
-
-
-
-	
-
-
