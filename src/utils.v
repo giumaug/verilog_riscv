@@ -42,7 +42,7 @@ b[31:0]={1'b1,a[30:0]};
 else b [31:0]=a [31:0];
 end
 
-e' lo stesso ???
+e' lo stesso ???eee
 //Note: if imm is two complement negative number, the positive value is zeroExtend( ~ (imm - 1))
 
 
