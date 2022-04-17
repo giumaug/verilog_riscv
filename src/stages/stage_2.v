@@ -78,45 +78,32 @@ module stage_2(input rst,
 					        else _bTaken <= 0;
 							$display("instruction BLTU");	
 						end
-
-		
-`BRANCH: begin
-						imm12 = rImm12B(word);
-			     		_bPc = ifId.rPc() + signExtend(imm12 << 1);
-			     		_rdNum = 0;
-						case (func3) 
-							`BEQ: begin
-								if (rs1 == rs2) _bTaken = True;
-								else _bTaken = False;
-								`DISPLAY("instruction JALR")
-							end	
-							`BNE: begin
-								if (rs1 != rs2) _bTaken = True;
-								else _bTaken = False;
-								`DISPLAY("instruction BNE")
-							end
-							`BLT: begin
-								if (rs1 < rs2) _bTaken = True;
-								else _bTaken = False;
-								`DISPLAY("instruction BLT")
-							end
-							`BLTU: begin
-								if (abs(rs1) < abs(rs2)) _bTaken = True;
-								else _bTaken = False;
-								`DISPLAY("instruction BLTU")
-							end
-							`BGE: begin
-								if (rs1 > rs2) _bTaken = True;
-								else _bTaken = False;
-							end
-							`BGEU: begin
-								if (abs(rs1) > abs(rs2)) _bTaken = True;
-								else _bTaken = False;
-								`DISPLAY("instruction BGEU")
-							end
-							//default: bTaken <= False;
-						endcase
+						`BGE: begin
+							if (reg_1 > reg_2) b_taken <= 1;
+							else b_taken <= 0;
+							$display("instruction BGE");
+						end
+						`BGEU: begin
+							if (abs(reg_1) > abs(reg_2)) b_taken <= 1;
+							else b_taken <= 0;
+							$display("instruction BGE");
+						end
+					endcase
+				end
+				`STORE: begin
+						_rdNum = 0;
+						_bTaken = False;
+						_bPc = 0;
+						imm12 = rImm12S(word);
+						`DISPLAY("instruction STORE")
 					end
+
+
+
+							`
+
+
+							
 
 			endcase
 			
