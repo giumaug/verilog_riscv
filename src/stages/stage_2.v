@@ -1,25 +1,38 @@
 `ifndef STAGE_1             
 `define STAGE_1
 `include "constants.vh"
+`include "branch_unit.v"
 `endif
 
 module stage_2(input rst,
                input clk,
-			   input stall,
 			   input[31:0] w_val,
                input[31:0] if_id_pc,
-               input[31:0] if_id_instr
-			   reg b_pc);
+               input[31:0] if_id_inst,
+			   output b_taken,
+               output[31:0] b_pc,
+               output[31:0] if_id_inst,
+               output[31:0] reg_1,
+               output[31:0] reg_2);
 
-	wire[4:0] reg_num_1 = if_id_instr[19:15];
-	wire[4:0] reg_num_2 = if_id_instr[24:20];
-	wire[4:0] w_reg_num = if_id_instr[24:20];
-	wire[6:0] opcode = if_id_instr[6:0]; 
-	wire[6:0] func_7 = if_id_instr[31:25];
-	wire[2:0] func_3 = if_id_instr[14:12];
-	reg reg_file_op <= 0;
-    reg[31:0] reg_1;
-	reg[31:0] reg_2;
+	wire[4:0] reg_num_1 = if_id_inst[19:15];
+	wire[4:0] reg_num_2 = if_id_inst[24:20];
+	wire[4:0] w_reg_num = if_id_inst[24:20];
+	wire[6:0] opcode = if_id_inst[6:0]; 
+	wire[6:0] func_7 = if_id_inst[31:25];
+	wire[2:0] func_3 = if_id_inst[14:12];
+    wire[11:0] imm_12_i = if_id_inst[31,20];
+    wire[19:0] imm_20 = {if_id_inst[31], if_id_inst[19:12], if_id_inst[20], if_id_inst[30:21]};
+
+	branch_unit branch_unit_0(.opcode(opcode),
+                              .func_3(func_3),
+                              .func_7(func_7),
+			                  .imm_12_i(imm_12_i),
+                              .imm_20(imm_20),
+                              .reg_1(reg_1),
+                              .reg_2(reg_2),
+			                  .b_taken(b_taken),
+                              .b_pc(b_pc));
 
 	register_file register_file_0(.reg_num_1(reg_num_1),
                                   .reg_num_2(reg_num_2),
@@ -29,122 +42,10 @@ module stage_2(input rst,
 								  .reg_1(reg_1),
 					              .reg_2(reg_2));
 
-    data_cache_0(.rst(rst),
-
-	always@(rst) begin
-		pc <= `BOOT_ADDRESS;
-	end
-
+	//Only for debug
 	always@(posedge clk) begin
-		reg_file_op <= 1;
-
-		if (stall == 0) begin
-			case (opcode)
-				`LUI: begin
-					id_ex_imm_20 <= imm_20_i(word);
-				end
-				`JAL: begin
-					//Note: if imm is two complement negative number, the positive value is zeroExtend( ~ (imm - 1))
-					if (imm_20[0] == 0) b_pc <= if_id_pc + {imm20, 1'b0};
-					else b_pc <=  if_id_pc - ( ~ ({imm20, 1'b0} - 1));
-					b_taken <= 1;
-					$display("instruction JAL");
-			    end
-				`JALR: begin
-					if (imm_12[11] == 0) b_pc <= (reg_1 + imm_12_i(word)) & 4094;
-					else b_pc <= (reg_1 - ( ~ (imm_12_i(word) - 1))) & 4094;
-					b_taken <= 1;
-					$display("instruction JALR");
-				end
-				`BRANCH: begin
-				    case (func_3)
-				        `BEQ: begin
-				            if (reg_1 == reg_2) b_taken <= 1;
-				            else b_taken <= 0;
-				            $display("instruction BEQ")
-				        end
-                        `BNE: begin
-                             if (reg_1 != reg_2) b_taken <= 1;
-                             else b_taken <= 0;
-                             $display("instruction BNE");
-                        end
-                        `BLT: begin
-						    if (reg_1 < reg_2) b_taken <= 1;
-							else b_taken <= 0;
-							$display("instruction BLT");	
-						end
-						`BLTU: begin
-						    if (abs(reg_1) < abs(reg_2)) b_taken <= 1;
-					        else _bTaken <= 0;
-							$display("instruction BLTU");	
-						end
-						`BGE: begin
-							if (reg_1 > reg_2) b_taken <= 1;
-							else b_taken <= 0;
-							$display("instruction BGE");
-						end
-						`BGEU: begin
-							if (abs(reg_1) > abs(reg_2)) b_taken <= 1;
-							else b_taken <= 0;
-							$display("instruction BGE");
-						end
-					endcase
-				end
-				`STORE: begin
-						_rdNum = 0;
-						_bTaken = False;
-						_bPc = 0;
-						imm12 = rImm12S(word);
-						`DISPLAY("instruction STORE")
-					end
-
-
-
-							`
-
-
-							
-
-			endcase
-			
-		end
-
-	end
-
-	always@(negedge clk) begin
-		reg_file_op <= 0;
-
+		$display("---begin fetch---");
+		????????????????? 
+		$display("---end fetch---");
 	end
 endmodule
-
-id_ex_imm_20
-b_pc
-b_taken
-
-
-
-Bit#(32) pc = ifId.rPc();
-			Bit#(32) word = ifId.rInstr();
-
-
-input rst,
-					 input[4:0] i_r_reg_num_1,
-                     input[4:0] i_r_reg_num_2,
-                     input[4:0] i_w_reg_num,
-                     input[31:0] i_w_val,
-		             input op,
-                     output reg[31:0] r_reg_1,
-                     output reg[31:0] r_reg_2);
-
-
-
-
-input [31:0] i_pc,
-			 input [31:0] i_rs_1,
-			 input [31:0] i_rs_2,
-			 input [4:0]  i_rd_num,
-			 input [11:0] i_imm_12,
-			 input [19:0] i_imm_20,
-			 input [6:0] i_opcode,
-			 input [2:0] i_func_3,
-			 input [6:0] i_func_7,	

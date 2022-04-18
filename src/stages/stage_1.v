@@ -18,7 +18,7 @@ module stage_1(input rst,
 	wire[31:0] pc_0_out;
 	wire[31:0] mux_0_out;
 
-	pc pc_0(.clk(clk),
+	pc pc_0(.clk(clk), -------------------lo metto qui o nel top??????????????????????????
             .rst(rst),
             .in(pc_out),
             .out(inst_addr));
