@@ -6,37 +6,20 @@
 `include "memory/pc.v"
 `endif
 
-module stage_1(input rst,
-               input clk,
-			   input b_taken,
+module stage_1(input b_taken,
+               input[31:0] pc,
                input[31:0] b_pc,
-			   output[31:0] inst_addr,
-			   output reg[31:0] pc_out);
+			   output[31:0] pc_out);
 
-	reg[31:0] const_incr <= 4; 
 	wire[31:0] adder_0_out;
 	wire[31:0] pc_0_out;
-	wire[31:0] mux_0_out;
 
-	pc pc_0(.clk(clk), -------------------lo metto qui o nel top??????????????????????????
-            .rst(rst),
-            .in(pc_out),
-            .out(inst_addr));
-
-	adder adder_0(.in_1(const_incr),
-		          .in_2(pc_0_out),
-	              .out(inst_addr));
+	adder adder_0(.in_1(32'b100),
+		          .in_2(pc),
+	              .out(adder_0_out));
 
 	mux mux_0(.in_1(adder_0_out),
 			  .in_2(b_pc),
 			  .sel(b_taken),
               .out(pc_out));
-
-	//Only for debug
-	always@(posedge clk) begin
-		$display("---begin fetch---");
-		$display("pc_out is %d ", pc_out);
-		$display("inst_addr is %d ", inst_addr);
-		$display("---end fetch---");
-	end
 endmodule
