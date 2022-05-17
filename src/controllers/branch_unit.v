@@ -9,20 +9,27 @@ module branch_unit(input[31:0] pc,
                    input[31:0] rs_2,
 			       output reg b_taken,
                    output reg[31:0] b_pc);
-                   
+     
+    reg[20:0] tmp_1;
+    reg[31:0] tmp_2;            
 	always @(*) begin
 		case (opcode)
 			`LUI: begin
 				//no needed
 			end
 			`JAL: begin
+			    tmp_1 = {imm_20, 1'b0};
+			    tmp_2 = SIGN_EXTEND(tmp_1, 21, 32);
 				//Note: if imm is two complement negative number, the positive value is zeroExtend( ~ (imm - 1))
-				if (imm_20[19] == 0) b_pc = pc + {{11{imm_20[19]}}, {imm_20, 1'b0}};
-				else b_pc =  pc - ( ~ ({{11{imm_20[19]}}, {imm_20, 1'b0}} - 1));
+				//if (imm_20[19] == 0) b_pc = pc + {{11{imm_20[19]}}, {imm_20, 1'b0}};
+				//else b_pc =  pc - ( ~ ({{11{imm_20[19]}}, {imm_20, 1'b0}} - 1));
+				if (imm_20[19] == 0) b_pc = pc + ABS(tmp_2, 32);
+				else b_pc =  pc - ABS(tmp_2, 32);
 				b_taken = 1;
 				$display("instruction JAL");
 			   end
 			`JALR: begin
+			    
 				if (imm_12_i[11] == 0) b_pc = (rs_1 + {{20{imm_12_i[11]}}, imm_12_i}) & 4094;
 				else b_pc = (rs_1 - ( ~ ({{20{imm_12_i[11]}}, imm_12_i} - 1))) & 4094;
 				b_taken = 1;
@@ -67,6 +74,7 @@ module branch_unit(input[31:0] pc,
 			default: begin
 				b_taken = 0;
 				b_pc = 0;
+				tmp = 0;
 			end 
 		endcase
 	end
