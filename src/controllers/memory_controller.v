@@ -1,8 +1,8 @@
 `ifndef MEMORY_CONTROLLER           
 `define MEMORY_CONTROLLER 
 `include "constants.vh"
-`include "inst_cache.v"
-`include "data_cache.v"
+`include "memory/inst_cache.v"
+`include "memory/data_cache.v"
 `endif
 
 module memory_controller(input rst,

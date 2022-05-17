@@ -28,22 +28,11 @@ function signed_compare(input[31:0] op_1, input[31:0] op_2);
 	end
 endfunction
 
-function abs(input[31:0] a, input[31:0] b)
+function abs(input[31:0] a)
     begin
+		abs = (a[31] == 0) ? a : abs = ( ~ (a - 1));
     end
-endfunction    
-
-reg a [31:0];
-reg b [31:0];
-always@(*)
-begin
-if (a[31]==1'b1)
-b[31:0]={1'b1,a[30:0]};
-else b [31:0]=a [31:0];
-end
-
-e' lo stesso ???eee
-//Note: if imm is two complement negative number, the positive value is zeroExtend( ~ (imm - 1))
+endfunction
 
 
 

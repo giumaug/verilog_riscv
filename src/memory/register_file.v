@@ -4,8 +4,8 @@ module register_file(input rst,
                      input[4:0] reg_num,
                      input[31:0] val,
 		             input op,
-                     output reg[31:0] reg_1,
-                     output reg[31:0] reg_2);
+                     output reg[31:0] rs_1,
+                     output reg[31:0] rs_2);
        
 	integer i;              
 	reg[31:0] registers[4:0];
@@ -23,8 +23,8 @@ module register_file(input rst,
     begin
 		if (op == 0) begin
 			$display("000 %d", op);
-    		reg_1 <= registers[reg_num_1]; 
-			reg_2 <= registers[reg_num_2];
+    		rs_1 <= registers[reg_num_1]; 
+			rs_2 <= registers[reg_num_2];
 		end
         if (op == 1) begin
 			$display("111 %d",op);
