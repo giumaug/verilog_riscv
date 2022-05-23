@@ -11,7 +11,8 @@ module branch_unit(input[31:0] pc,
                    output reg[31:0] b_pc);
      
     reg[20:0] tmp_1;
-    reg[31:0] tmp_2;            
+    reg[31:0] tmp_2;
+    reg[31:0] tmp_3;     
 	always @(*) begin
 		case (opcode)
 			`LUI: begin
@@ -29,9 +30,12 @@ module branch_unit(input[31:0] pc,
 				$display("instruction JAL");
 			   end
 			`JALR: begin
-			    
-				if (imm_12_i[11] == 0) b_pc = (rs_1 + {{20{imm_12_i[11]}}, imm_12_i}) & 4094;
-				else b_pc = (rs_1 - ( ~ ({{20{imm_12_i[11]}}, imm_12_i} - 1))) & 4094;
+				//if (imm_12_i[11] == 0) b_pc = (rs_1 + {{20{imm_12_i[11]}}, imm_12_i}) & 4094;
+				//else b_pc = (rs_1 - ( ~ ({{20{imm_12_i[11]}}, imm_12_i} - 1))) & 4094;
+				tmp_2 = SIGN_EXTEND(imm_12_i, 12, 32);
+				tmp_3 = ABS(tmp_2, 32);
+				if (imm_12_i[11] == 0) b_pc = (rs_1 + tmp_3) & 4094;
+				else b_pc = (rs_1 - tmp_3) & 4094;
 				b_taken = 1;
 				$display("instruction JALR");
 			end

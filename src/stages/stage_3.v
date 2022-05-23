@@ -32,11 +32,11 @@ module stage_3(input[31:0] i_pc,
 				case (i_func_3)
 					`ADDI: begin
 						$display("instruction ADDI")
-						alu_out = i_rs_1 + i_imm_12_i;
+						alu_out = i_rs_1 + {{20{i_imm_12_i[11]}}, i_imm_12_i};
 					end
 					`SLTI: begin
 						$display("instruction SLTI")
-						if ($signed(i_rs_1) < $signed(i_imm_12_i)) alu_out = 1;
+						if ($signed(i_rs_1) < $signed({{20{i_imm_12_i[11]}}, i_imm_12_i})) alu_out = 1;
 						else alu_out = 0;
 					end
 					`SLTIU: begin
