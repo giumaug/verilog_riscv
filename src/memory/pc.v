@@ -3,18 +3,18 @@
 `include "constants.vh"
 `endif
 
-module pc(input clk,
-          input rst,
-		  input[31:0] in,
+module pc(input i_clk,
+          input i_rst,
+		  input[31:0] i_in,
           output reg [31:0] out);
 
-	always@(rst) begin
-		if (rst == 1) begin
+	always@(i_rst) begin
+		if (i_rst == 1) begin
 			out <= `BOOT_ADDRESS;
 		end
 	end
 
-	always @(posedge(clk)) begin
-		out <= in;
+	always @(posedge(i_clk)) begin
+		out <= i_in;
 	end
 endmodule

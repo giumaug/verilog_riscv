@@ -1,5 +1,5 @@
-module id_ex(input rst,
-             input clk,
+module id_ex(input i_rst,
+             input i_clk,
 			 input [31:0] i_pc,
 			 input [31:0] i_rs_1,
 			 input [31:0] i_rs_2,
@@ -25,7 +25,7 @@ module id_ex(input rst,
 			 output reg[2:0] func_3,
 			 output reg[6:0] func_7);
 			 
-	always @(posedge(clk)) begin
+	always @(posedge(i_clk)) begin
 		pc <= i_pc;
 		rs_1 <= i_rs_1;
 		rs_2 <= i_rs_2;
@@ -38,8 +38,8 @@ module id_ex(input rst,
 		func_7 <= i_func_7;
     end
 
-	always@(rst) begin
-		if (rst == 1) begin
+	always@(i_rst) begin
+		if (i_rst == 1) begin
 			pc <= 0;
 			rs_1 <= 0;
 			rs_2 <= 0;

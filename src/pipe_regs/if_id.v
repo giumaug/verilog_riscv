@@ -1,5 +1,5 @@
-module if_id(input rst,
-			 input clk,
+module if_id(input i_rst,
+			 input i_clk,
 			 input[31:0] i_pc,
 			 input[31:0] i_inst,
              output reg[31:0] pc,
@@ -10,8 +10,8 @@ module if_id(input rst,
 		inst <= i_inst;
     end
 
-	always@(rst) begin
-		if (rst == 1) begin
+	always@(i_rst) begin
+		if (i_rst == 1) begin
 			pc <= 0;
 			inst <= 0;
 		end

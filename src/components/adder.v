@@ -1,6 +1,6 @@
-module adder(input[31:0] in_1,
-			 input[31:0] in_2,
+module adder(input[31:0] i_in_1,
+			 input[31:0] i_in_2,
 			 output[31:0] out);
 
-	assign out = in_1 + in_2;
+	assign out = i_in_1 + i_in_2;
 endmodule
