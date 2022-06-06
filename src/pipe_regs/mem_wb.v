@@ -1,5 +1,5 @@
 module mem_wb(input i_clk,
-			  inpit i_rst,
+			  input i_rst,
 			  input[31:0] i_mem_out,         
               input[4:0] i_rd_num,
               input[31:0] i_alu_out,
@@ -9,7 +9,7 @@ module mem_wb(input i_clk,
               output reg[31:0] alu_out,
               output reg op_type);
               
-	always @(posedge(clk)) begin
+	always @(posedge(i_clk)) begin
 		mem_out <= i_mem_out;     
         rd_num <= i_rd_num;
         alu_out <= i_alu_out;

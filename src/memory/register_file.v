@@ -1,8 +1,8 @@
 module register_file(input i_rst,
 					 input[4:0] i_reg_num_1,
                      input[4:0] i_reg_num_2,
-                     input[4:0] i_reg_num,
-                     input[31:0] i_val,
+                     input[4:0] i_w_reg_num,
+                     input[31:0] i_w_val,
 		             input i_op,
                      output reg[31:0] rs_1,
                      output reg[31:0] rs_2);
@@ -19,16 +19,16 @@ module register_file(input i_rst,
 	end
 	
 	 
-    always @(op)
+    always @(i_op)
     begin
-		if (op == 0) begin
-			$display("000 %d", op);
+		if (i_op == 0) begin
+			$display("000 %d", i_op);
     		rs_1 <= registers[i_reg_num_1]; 
 			rs_2 <= registers[i_reg_num_2];
 		end
-        if (op == 1) begin
-			$display("111 %d",op);
-    		registers[i_reg_num] <= i_val;
+        if (i_op == 1) begin
+			$display("111 %d", i_op);
+    		registers[i_w_reg_num] <= i_w_val;
 		end
     end
 endmodule

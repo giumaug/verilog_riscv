@@ -16,12 +16,12 @@ module branch_unit(input[31:0] i_pc,
 			       output reg b_taken,
                    output reg[31:0] b_pc);
      
-    reg[20:0] tmp_1 = {i_imm_20, 1'b0};
-    reg[31:0] tmp_2 = `SIGN_EXTEND(tmp_1, 21, 32);
-    reg[31:0] tmp_3 = `SIGN_EXTEND(i_imm_12_i, 12, 32);
-    reg[31:0] tmp_4 = `ABS(tmp_2, 32);
-    reg[12:0] tmp_5 = {i_imm_12_b, 1'b0};
-    reg[31:0] tmp_6 = `SIGN_EXTEND(tmp_5, 13, 32);
+    wire[20:0] tmp_1 = {i_imm_20, 1'b0};
+    wire[31:0] tmp_2 = `SIGN_EXTEND(tmp_1, 21, 32);
+    wire[31:0] tmp_3 = `SIGN_EXTEND(i_imm_12_i, 12, 32);
+    wire[31:0] tmp_4 = `ABS(tmp_2, 32);
+    wire[12:0] tmp_5 = {i_imm_12_b, 1'b0};
+    wire[31:0] tmp_6 = `SIGN_EXTEND(tmp_5, 13, 32);
 	always @(*) begin
 		case (i_opcode)
 			`LUI: begin
@@ -31,7 +31,7 @@ module branch_unit(input[31:0] i_pc,
 				//Note: if imm is two complement negative number, the positive value is zeroExtend( ~ (imm - 1))
 				//if (i_imm_20[19] == 0) b_pc = i_pc + {{11{i_imm_20[19]}}, {i_imm_20, 1'b0}};
 				//else b_pc =  i_pc - ( ~ ({{11{i_imm_20[19]}}, {i_imm_20, 1'b0}} - 1));
-				if (i_imm_20[19] == 0) b_pc = i_pc + ABS(tmp_2, 32);
+				if (i_imm_20[19] == 0) b_pc = i_pc + `ABS(tmp_2, 32);
 				else b_pc =  i_pc - `ABS(tmp_2, 32);
 				b_taken = 1;
 				$display("instruction JAL");
@@ -66,7 +66,7 @@ module branch_unit(input[31:0] i_pc,
 						$display("instruction BLT");	
 					end
 					`BLTU: begin
-						if (`ABS(i_rs_1) < `ABS(i_rs_2)) b_taken = 1;
+						if (`ABS(i_rs_1, 32) < `ABS(i_rs_2, 32)) b_taken = 1;
 					   	else b_taken = 0;
 						$display("instruction BLTU");	
 					end
@@ -76,7 +76,7 @@ module branch_unit(input[31:0] i_pc,
 						$display("instruction BGE");
 					end
 					`BGEU: begin
-						if (`ABS(i_rs_1) > `ABS(i_rs_2)) b_taken = 1;
+						if (`ABS(i_rs_1, 32) > `ABS(i_rs_2, 32)) b_taken = 1;
 						else b_taken = 0;
 						$display("instruction BGE");
 					end
@@ -85,7 +85,6 @@ module branch_unit(input[31:0] i_pc,
 			default: begin
 				b_taken = 0;
 				b_pc = 0;
-				tmp = 0;
 			end 
 		endcase
 	end

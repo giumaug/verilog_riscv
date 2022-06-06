@@ -19,21 +19,21 @@ module stage_3(input[31:0] i_pc,
 			   //output[31:0] rs_1,
                output[31:0] rs_2,
                output[4:0] rd_num,
-               output[31:0] alu_out,
+               output reg[31:0] alu_out,
                output[6:0] opcode,
                output[2:0] func_3,
                output reg op_type);
                
 	//assign rs_1 = rs_1;
-    assign rs_2 = rs_2
+    assign rs_2 = rs_2;
     assign rd_num = i_rd_num;
     assign opcode = i_opcode;
     assign func_3 = i_func_3;
                
-	reg[31:0] tmp_1 = `SIGN_EXTEND(i_imm_12_i, 12, 32);
-	reg[4:0] tmp_2 = i_imm_12_i[4:0];
-	reg[4:0] tmp_3 = i_rs_2[4:0];
-	reg[31:0] tmp_4 = `SIGN_EXTEND(i_imm_12_s, 12, 32);
+	wire[31:0] tmp_1 = `SIGN_EXTEND(i_imm_12_i, 12, 32);
+	wire[4:0] tmp_2 = i_imm_12_i[4:0];
+	wire[4:0] tmp_3 = i_rs_2[4:0];
+	wire[31:0] tmp_4 = `SIGN_EXTEND(i_imm_12_s, 12, 32);
 	always @(*) begin
 		case (opcode)
 			`OPIMM: begin
@@ -51,7 +51,7 @@ module stage_3(input[31:0] i_pc,
 					end
 					`SLTIU: begin
 						$display("instruction SLTIU");
-						if (`ABS(i_rs_1) < `ABS(tmp_1)) alu_out = 1;
+						if (`ABS(i_rs_1, 32) < `ABS(tmp_1, 32)) alu_out = 1;
 						else alu_out = 0; 
 					end
 					`ANDI: begin
@@ -79,7 +79,7 @@ module stage_3(input[31:0] i_pc,
 			end
 			`OP: begin
 				op_type = 0;
-				case (i_func3)
+				case (i_func_3)
 					`ADDSUB: begin
 						$display("instruction ADDSUB");
 						if (i_func_7 == `ADD) alu_out = i_rs_1 + i_rs_2;
@@ -92,7 +92,7 @@ module stage_3(input[31:0] i_pc,
 					end
 					`SLTU: begin
 						$display("instruction SLTU");
-						if (`ABS(i_rs_1) < `ABS(i_rs_2)) alu_out = 1;
+						if (`ABS(i_rs_1, 32) < `ABS(i_rs_2, 32)) alu_out = 1;
 						else alu_out = 0;
 					end
 					`AND: begin
@@ -109,7 +109,7 @@ module stage_3(input[31:0] i_pc,
 					end
 					`SLL: begin
 						$display("instruction SLL");
-						alu_out = rs1 << tmp_3;
+						alu_out = i_rs_1 << tmp_3;
 					end
 					`SRLSRA: begin
 						$display("instruction SRLSRA");
@@ -134,17 +134,17 @@ module stage_3(input[31:0] i_pc,
 				alu_out = {i_imm_20_i, 12'b0};
 			end
 			`AUIPC: begin
-				$display("instruction AUIPC")
+				$display("instruction AUIPC");
 				op_type = 0;
-				alu_out = {i_imm_20_i, 12'b0} + pc;
+				alu_out = {i_imm_20_i, 12'b0} + i_pc;
 			end
 			`LOAD: begin
-				$display("instruction LOAD")
+				$display("instruction LOAD");
 				op_type = 1;
 				alu_out = i_rs_1 + tmp_1;
 			end
 			`STORE: begin
-				$display("instruction STORE")
+				$display("instruction STORE");
 				op_type = 1;
 				alu_out = i_rs_1 + tmp_4;
 			end		

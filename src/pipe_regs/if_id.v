@@ -5,7 +5,7 @@ module if_id(input i_rst,
              output reg[31:0] pc,
              output reg[31:0] inst);
            
-	always @(posedge(clk)) begin
+	always @(posedge(i_clk)) begin
 		pc <= i_pc;
 		inst <= i_inst;
     end

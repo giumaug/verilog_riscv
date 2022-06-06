@@ -8,7 +8,7 @@ module top();
 	reg rst;
 	reg[31:0] counter;
 
-	verilog_riscv verilog_riscv_0(.clk(clk), .rst(rst));
+	verilog_riscv verilog_riscv_0(.i_clk(clk), .i_rst(rst));
 
 	always #5 clk = ~clk;
 
@@ -21,6 +21,6 @@ module top();
 	always @(posedge(clk)) begin
 	    if (rst == 1) rst <= 0;
 		counter <= counter + 1;
-		if (counter == 20) $finish();
+		if (counter == 10) $finish();
     end
 endmodule

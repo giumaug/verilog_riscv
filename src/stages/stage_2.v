@@ -8,7 +8,7 @@
 module stage_2(input[31:0] i_w_rd,
                input[4:0] i_w_rd_num,
 			   input[31:0] i_inst,
-			   input[31:0] pc,
+			   input[31:0] i_pc,
 			   output b_taken,
                output[31:0] b_pc,
                output[31:0] rs_1,
@@ -20,7 +20,7 @@ module stage_2(input[31:0] i_w_rd,
                output[11:0] imm_12_i,
                output[19:0] imm_20,
                output[11:0] imm_12_b,
-               output[11:0] imm_20_i,
+               output[19:0] imm_20_i,
                output[11:0] imm_12_s);
                
 	wire[4:0] reg_num_1 = i_inst[19:15];
@@ -38,7 +38,7 @@ module stage_2(input[31:0] i_w_rd,
 	assign imm_20_i = {i_inst[31:12]};
 	assign imm_12_s = {i_inst[31:25], i_inst[11:7]};
 	
-	branch_unit branch_unit_0(.i_pc(pc),
+	branch_unit branch_unit_0(.i_pc(i_pc),
 							  .i_opcode(opcode),
                               .i_func_3(func_3),
                               .i_func_7(func_7),
@@ -52,8 +52,8 @@ module stage_2(input[31:0] i_w_rd,
 
 	register_file register_file_0(.i_reg_num_1(reg_num_1),
                                   .i_reg_num_2(reg_num_2),
-                                  .i_reg_num(w_rd_num),
-                                  .i_val(w_rd),
+                                  .i_w_reg_num(i_w_rd_num),
+                                  .i_w_val(i_w_rd),
                                   .i_op(reg_file_op),
 								  .rs_1(rs_1),
 					              .rs_2(rs_2));

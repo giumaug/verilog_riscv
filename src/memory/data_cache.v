@@ -13,8 +13,8 @@ module data_cache #(parameter CACHE_SIZE =  `_DATA_CACHE_SIZE,
 
 	reg[7:0] mem_cell[CACHE_SIZE:0];
 
-	always@(rst) begin
-		if (rst == 1) begin
+	always@(i_rst) begin
+		if (i_rst == 1) begin
 			`_DATA_CACHE_PAYLOAD
 		end
 	end

@@ -6,6 +6,9 @@
 `include "pipe_regs/mem_wb.v"
 `include "stages/stage_1.v"
 `include "stages/stage_2.v"
+`include "stages/stage_3.v"
+`include "stages/stage_4.v"
+`include "stages/stage_5.v"
 `include "controllers/memory_controller.v"
 `endif
 
@@ -57,13 +60,13 @@ module verilog_riscv(input i_rst,
 	wire[2:0] ex_mem_func_3;
 	wire ex_mem_op_type;
 	
-	wire[31:0] i_mem_wb_mem_out,         
-    wire[4:0] i_mem_wb_rd_num,
-    wire[31:0] i_mem_wb_alu_out,
-    wire i_mem_wb_op_type,
-    wire[31:0] mem_wb_mem_out,         
-    wire[4:0] mem_wb_rd_num,
-    wire[31:0] mem_wb_alu_out,
+	wire[31:0] i_mem_wb_mem_out;    
+    wire[4:0] i_mem_wb_rd_num;
+    wire[31:0] i_mem_wb_alu_out;
+    wire i_mem_wb_op_type;
+    wire[31:0] mem_wb_mem_out;         
+    wire[4:0] mem_wb_rd_num;
+    wire[31:0] mem_wb_alu_out;
     wire mem_wb_op_type;
               
 	wire[31:0] pc_0_out;
@@ -76,9 +79,9 @@ module verilog_riscv(input i_rst,
 	wire[31:0] w_rd;
 	wire[4:0] w_rd_num;
 
-	assign i_id_ix_pc =  if_id_pc:
+	assign i_if_id_pc =  if_id_pc;
 
-	pc pc_0(.clk(i_clk), 
+	pc pc_0(.i_clk(i_clk), 
             .i_rst(i_rst),
             .i_in(i_if_id_pc),
             .out(pc_0_out));
@@ -92,7 +95,7 @@ module verilog_riscv(input i_rst,
 
 	id_ex id_ex_0(.i_rst(i_rst),
                   .i_clk(i_clk),
-			      .i_pc(i_id_ix_pc),
+			      .i_pc(i_if_id_pc),
 			      .i_rs_1(i_id_ex_rs_1),
 			      .i_rs_2(i_id_ex_rs_2),
 			      .i_rd_num(i_id_ex_rd_num),
@@ -140,7 +143,7 @@ module verilog_riscv(input i_rst,
 	stage_2 stage_2_0(.i_w_rd(w_rd),
                       .i_w_rd_num(w_rd_num),
                       .i_inst(if_id_inst),
-                      .i_pc(if_id_pc)
+                      .i_pc(if_id_pc),
                       .b_taken(b_taken),
                       .b_pc(b_pc),
                       .rs_1(i_id_ex_rs_1),
@@ -194,99 +197,96 @@ module verilog_riscv(input i_rst,
                        .i_alu_out(mem_wb_alu_out),
                        .i_op_type(mem_wb_op_type),
                        .rd_num(w_rd_num),
-                       .rd(w_rd_num));
+                       .rd(w_rd));
                            
 	memory_controller memory_controller_0(.i_rst(i_rst),
-									      .i_address_0(tmp_address_0),
-                                          .i_val_0(tmp_i_val_0),
-                                          .i_op_type_0(tmp_op_type_0),
+									      .i_address_0(addr_to_mem_ctr),
+                                          .i_val_0(val_to_mem_ctr),
+                                          .i_op_type_0(op_to_mem_ctr),
     							          .i_address_1(pc_0_out),
                                           .i_val_1(32'b0),
-                                          .op_type_1(1'b0),
-                                          .o_val_0(tmp_o_val_0),
+                                          .i_op_type_1(1'b0),
+                                          .o_val_0(i_val_from_mem_ctr),
                                           .o_val_1(i_if_id_inst));
 
 	always@(posedge i_clk) begin
+	
+		$display("---begin pc---");
+		$display("i_in = %0h", i_if_id_pc);
+		$display("out = %0h", pc_0_out);
+		$display("---end pc---");
+	
 		$display("---begin fetch---");
-		$display("i_b_taken = %0h", i_b_taken);
-		$display("i_pc = %0h", i_pc);
-        $display("i_inst = %0h", i_inst);
-        $display("pc = %0h", pc);
+		$display("i_b_taken = %0h", b_taken);
+		$display("i_pc = %0h", pc_0_out);
+        $display("pc_out = %0h", i_if_id_pc);
 		$display("---end fetch---");
-	end
-
-	always@(posedge i_clk) begin
+		
 		$display("---begin decode---");
-		$display("i_w_rd = %0h", i_w_rd);
-        $display("i_w_rd_num= %0h", i_w_rd_num);
-        $display("i_inst = %0h", i_inst);
-        $display("i_pc = %0h", i_pc);
+		$display("i_w_rd = %0h", w_rd);
+        $display("i_w_rd_num= %0h", w_rd_num);
+        $display("i_inst = %0h", if_id_inst);
+        $display("i_pc = %0h", if_id_pc);
         $display("b_taken = %0h", b_taken);
         $display("b_pc = %0h", b_pc);
-        $display("rs_1 = %0h", rs_1);
-        $display("rs_2 = %0h", rs_2);
-		$display("rd_num = %0h", rd_num);
-		$display("opcode = %0h", opcode);
-        $display("func_7 = %0h", func_7);
-        $display("func_3 = %0h", func_3);
-        $display("imm_12_i = %0h", imm_12_i);
-        $display("imm_20 = %0h", imm_20);
-        $display("imm_12_b = %0h", imm_12_b);
-        $display("imm_20_i = %0h", imm_20_i);
-		$display("imm_12_s = %0h", imm_12_s);
+        $display("rs_1 = %0h", i_id_ex_rs_1);
+        $display("rs_2 = %0h", i_id_ex_rs_2);
+		$display("rd_num = %0h", i_id_ex_rd_num);
+		$display("opcode = %0h", i_id_ex_opcode);
+        $display("func_7 = %0h", i_id_ex_func_7);
+        $display("func_3 = %0h", i_id_ex_func_3);
+        $display("imm_12_i = %0h", i_id_ex_imm_12_i);
+        $display("imm_20 = %0h", i_id_ex_imm_20);
+        $display("imm_12_b = %0h", i_id_ex_imm_12_b);
+        $display("imm_20_i = %0h", i_id_ex_imm_20_i);
+		$display("imm_12_s = %0h", i_id_ex_imm_12_s);
 		$display("---end decode---");
-	end
 		
-	always@(posedge i_clk) begin
 		$display("---begin execute---");
-		$display("i_pc = %0h", i_pc);
-		$display("i_rs_1 = %0h", i_rs_1);
-		$display("i_rs_2 = %0h", i_rs_2);
-		$display("i_rd_num = %0h", i_rd_num);
-		$display("i_imm_12_i = %0h", i_imm_12_i);
-        $display("i_imm_20 = %0h", i_imm_20);
-        $display("i_imm_12_b = %0h", i_imm_12_b);
-        $display("i_imm_20_i = %0h", i_imm_20_i);
-		$display("i_imm_12_s = %0h", i_imm_12_s);
-		$display("i_opcode = %0h", i_opcode);
-		$display("i_func_3 = %0h", i_func_3);
-		$display("i_func_7 = %0h", i_func_7);
-        $display("rs_2 = %0h", rs_2);
-        $display("rd_num = %0h", rd_num);
-        $display("alu_out = %0h", alu_out);
-        $display("opcode = %0h", opcode);
-        $display("func_3 = %0h", func_3);
-        $display("op_type = %0h", op_type);
+		$display("i_pc = %0h", id_ex_pc);
+		$display("i_rs_1 = %0h", id_ex_rs_1);
+		$display("i_rs_2 = %0h", id_ex_rs_2);
+		$display("i_rd_num = %0h", id_ex_rd_num);
+		$display("i_imm_12_i = %0h", id_ex_imm_12_i);
+        $display("i_imm_20 = %0h", id_ex_imm_20);
+        $display("i_imm_12_b = %0h", id_ex_imm_12_b);
+        $display("i_imm_20_i = %0h", id_ex_imm_20_i);
+		$display("i_imm_12_s = %0h", id_ex_imm_12_s);
+		$display("i_opcode = %0h", id_ex_opcode);
+		$display("i_func_3 = %0h", id_ex_func_3);
+		$display("i_func_7 = %0h", id_ex_func_7);
+        $display("rs_2 = %0h", i_ex_mem_rs_2);
+        $display("rd_num = %0h", i_ex_mem_rd_num);
+        $display("alu_out = %0h", i_ex_mem_alu_out);
+        $display("opcode = %0h", i_ex_mem_opcode);
+        $display("func_3 = %0h", i_ex_mem_func_3);
+        $display("op_type = %0h", i_ex_mem_op_type);
 		$display("---end execute---");
-	end
-	
-	always@(posedge i_clk) begin
+		
 		$display("---begin mem access---");
-		$display("i_rs_2 = %0h", i_rs_2);
-		$display("i_rd_num = %0h", i_rd_num);
-		$display("i_alu_out = %0h", i_alu_out);
-		$display("i_opcode = %0h", i_opcode);
-        $display("i_func_3 = %0h", i_func_3);
-        $display("i_op_type = %0h", i_op_type);
+		$display("i_rs_2 = %0h", i_ex_mem_rs_2);
+		$display("i_rd_num = %0h", i_ex_mem_rd_num);
+		$display("i_alu_out = %0h", i_ex_mem_alu_out);
+		$display("i_opcode = %0h", i_ex_mem_opcode);
+        $display("i_func_3 = %0h", i_ex_mem_func_3);
+        $display("i_op_type = %0h", i_ex_mem_op_type);
         $display("i_val_from_mem_ctr = %0h", i_val_from_mem_ctr);
-        $display("mem_out = %0h", mem_out);          
-        $display("rd_num = %0h", rd_num);
-        $display("alu_out = %0h", alu_out);
-		$display("op_type = %0h", op_type);
+        $display("mem_out = %0h", i_mem_wb_mem_out);          
+        $display("rd_num = %0h", i_mem_wb_rd_num);
+        $display("alu_out = %0h", i_mem_wb_alu_out);
+		$display("op_type = %0h", i_mem_wb_op_type);
         $display("addr_to_mem_ctr = %0h", addr_to_mem_ctr);
         $display("val_to_mem_ctr = %0h", val_to_mem_ctr);
         $display("op_to_mem_ctr = %0h", op_to_mem_ctr);
 		$display("---end mem access---");
-	end
-	
-	always@(posedge i_clk) begin
+		
 		$display("---begin begin write back---");
-		$display("i_mem_out = %0h", i_mem_out);
-        $display("i_rd_num = %0h", i_rd_num);
-        $display("i_alu_out = %0h", i_alu_out);
-        $display("i_op_type = %0h", i_op_type);
-        $display("rd_num = %0h", rd_num);
-        $display("rd = %0h", rd);
+		$display("i_mem_out = %0h", mem_wb_mem_out);
+        $display("i_rd_num = %0h", mem_wb_rd_num);
+        $display("i_alu_out = %0h", mem_wb_alu_out);
+        $display("i_op_type = %0h", mem_wb_op_type);
+        $display("rd_num = %0h", w_rd_num);
+        $display("rd = %0h", w_rd);
 		$display("---end write back---");
 	end
 endmodule
