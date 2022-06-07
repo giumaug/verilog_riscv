@@ -18,8 +18,8 @@ module stage_1(input i_b_taken,
 		          .i_in_2(i_pc),
 	              .out(adder_0_out));
 
-	mux mux_0(.i_in_1(adder_0_out),
-			  .i_in_2(i_b_pc),
+	mux mux_0(.i_in_1(32'b100), //adder_0_out
+			  .i_in_2(32'b100),  //i_b_pc
 			  .i_sel(i_b_taken),
               .out(pc_out));
               
