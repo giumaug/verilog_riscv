@@ -5,7 +5,9 @@
 `include "memory/register_file.v"
 `endif
 
-module stage_2(input[31:0] i_w_rd,
+module stage_2(input i_rst,
+               input i_reg_op,
+			   input[31:0] i_w_rd,
                input[4:0] i_w_rd_num,
 			   input[31:0] i_inst,
 			   input[31:0] i_pc,
@@ -50,11 +52,12 @@ module stage_2(input[31:0] i_w_rd,
 			                  .b_taken(b_taken),
                               .b_pc(b_pc));
 
-	register_file register_file_0(.i_reg_num_1(reg_num_1),
+	register_file register_file_0(.i_rst(i_rst),
+	                              .i_reg_num_1(reg_num_1),
                                   .i_reg_num_2(reg_num_2),
                                   .i_w_reg_num(i_w_rd_num),
                                   .i_w_val(i_w_rd),
-                                  .i_op(reg_file_op),
+                                  .i_op(i_reg_op),
 								  .rs_1(rs_1),
 					              .rs_2(rs_2));
 					              

@@ -138,7 +138,9 @@ module verilog_riscv(input i_rst,
                       .i_b_pc(b_pc),
                       .pc_out(i_if_id_pc));
 
-	stage_2 stage_2_0(.i_w_rd(w_rd),
+	stage_2 stage_2_0(.i_rst(i_rst),
+	                  .i_reg_op(i_clk),
+	                  .i_w_rd(w_rd),
                       .i_w_rd_num(w_rd_num),
                       .i_inst(if_id_inst),
                       .i_pc(if_id_pc),
