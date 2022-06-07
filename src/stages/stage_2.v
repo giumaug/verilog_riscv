@@ -57,4 +57,8 @@ module stage_2(input[31:0] i_w_rd,
                                   .i_op(reg_file_op),
 								  .rs_1(rs_1),
 					              .rs_2(rs_2));
+					              
+	initial begin
+		$monitor("reg_num_1 = %0h \n reg_num_2 = %0h \n ",reg_num_1, reg_num_2);
+	end
 endmodule

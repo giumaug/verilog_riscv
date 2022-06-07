@@ -25,10 +25,8 @@ module inst_cache #(parameter CACHE_SIZE =  `_INST_CACHE_SIZE,
 			          mem_cell[i_address + 2 - CACHE_OFFSET], 
 			          mem_cell[i_address + 1 - CACHE_OFFSET], 
 			          mem_cell[i_address - CACHE_OFFSET]};
-			//$display("--------------i_address is %0h ", address);
-			//$display("--------------o_val is %0h ", o_val);
 		end else if (i_op_type == 1) begin
-			mem_cell[i_address - CACHE_OFFSET] <= i_val; //IS IT POSSIBLE TO HAVE A TMP VARIABLE?
+			mem_cell[i_address - CACHE_OFFSET] <= i_val;
             o_val <= 31'bx;
 		end
 	end

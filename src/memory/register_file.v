@@ -19,10 +19,10 @@ module register_file(input i_rst,
 	end
 	
 	 
-    always @(i_op)
+    always @(*)
     begin
 		if (i_op == 0) begin
-			$display("000 %d", i_op);
+			$display("reading from register file !!!!!");
     		rs_1 <= registers[i_reg_num_1]; 
 			rs_2 <= registers[i_reg_num_2];
 		end

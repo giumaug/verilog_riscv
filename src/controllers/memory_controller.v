@@ -18,7 +18,7 @@ module memory_controller(input i_rst,
 	//data cache
 	data_cache #(.CACHE_SIZE(`_DATA_CACHE_SIZE), 
             .CACHE_OFFSET(`_DATA_CACHE_OFFSET))
-            data_cache_0(.i_rst(rst),
+            data_cache_0(.i_rst(i_rst),
                          .i_address(i_address_0),
                          .i_val(i_val_0),
                          .i_op_type(i_op_type_0),
@@ -27,7 +27,7 @@ module memory_controller(input i_rst,
     //instruction cache
 	inst_cache #(.CACHE_SIZE(`_INST_CACHE_SIZE), 
 			.CACHE_OFFSET(`_INST_CACHE_OFFSET))
-            inst_cache_0(.i_rst(rst),
+            inst_cache_0(.i_rst(i_rst),
                          .i_address(i_address_1),
                          .i_val(i_val_1),
                          .i_op_type(i_op_type_1),

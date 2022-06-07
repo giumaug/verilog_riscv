@@ -79,8 +79,6 @@ module verilog_riscv(input i_rst,
 	wire[31:0] w_rd;
 	wire[4:0] w_rd_num;
 
-	assign i_if_id_pc =  if_id_pc;
-
 	pc pc_0(.i_clk(i_clk), 
             .i_rst(i_rst),
             .i_in(i_if_id_pc),
