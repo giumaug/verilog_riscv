@@ -61,7 +61,4 @@ module stage_2(input i_rst,
 								  .rs_1(rs_1),
 					              .rs_2(rs_2));
 					              
-	initial begin
-		$monitor("reg_num_1 = %0h \n reg_num_2 = %0h \n ",reg_num_1, reg_num_2);
-	end
 endmodule
