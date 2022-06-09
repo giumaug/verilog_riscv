@@ -60,5 +60,27 @@ module stage_2(input i_rst,
                                   .i_op(i_reg_op),
 								  .rs_1(rs_1),
 					              .rs_2(rs_2));
+					           
+    always@(posedge i_debug) begin
+        $display("---begin decode---");
+		$display("i_w_rd = %0h",    );
+        $display("i_w_rd_num= %0h", w_rd_num);
+        $display("i_inst = %0h", if_id_inst);
+        $display("i_pc = %0h", if_id_pc);
+        $display("b_taken = %0h", b_taken);
+        $display("b_pc = %0h", b_pc);
+        $display("rs_1 = %0h", i_id_ex_rs_1);
+        $display("rs_2 = %0h", i_id_ex_rs_2);
+		$display("rd_num = %0h", i_id_ex_rd_num);
+		$display("opcode = %0h", i_id_ex_opcode);
+        $display("func_7 = %0h", i_id_ex_func_7);
+        $display("func_3 = %0h", i_id_ex_func_3);
+        $display("imm_12_i = %0h", i_id_ex_imm_12_i);
+        $display("imm_20 = %0h", i_id_ex_imm_20);
+        $display("imm_12_b = %0h", i_id_ex_imm_12_b);
+        $display("imm_20_i = %0h", i_id_ex_imm_20_i);
+		$display("imm_12_s = %0h", i_id_ex_imm_12_s);
+		$display("---end decode---");  
+    end
 					              
 endmodule

@@ -6,7 +6,8 @@
 `include "memory/pc.v"
 `endif
 
-module stage_1(input i_b_taken,
+module stage_1(input i_debug,
+               input i_b_taken,
                input[31:0] i_pc,
                input[31:0] i_b_pc,
 			   output[31:0] pc_out);
@@ -22,5 +23,13 @@ module stage_1(input i_b_taken,
 			  .i_in_2(i_b_pc),
 			  .i_sel(i_b_taken),
               .out(pc_out));
+              
+    always@(posedge i_debug) begin
+        $display("---begin fetch---");
+		$display("i_b_taken = %0h", i_b_taken);
+		$display("i_pc = %0h", i_pc);
+        $display("pc_out = %0h", pc_out);
+		$display("---end fetch---");
+    end
                        
 endmodule

@@ -1,4 +1,4 @@
-`define BOOT_ADDRESS 							'h0 //'h12c
+`define BOOT_ADDRESS 							'h12c
 
 `define _CACHE_SIZE 							'h100
 `define _CACHE_TYPE 							1'bx
