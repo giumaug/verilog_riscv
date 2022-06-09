@@ -35,6 +35,7 @@ module stage_3(input[31:0] i_pc,
 	wire[4:0] tmp_3 = i_rs_2[4:0];
 	wire[31:0] tmp_4 = `SIGN_EXTEND(i_imm_12_s, 12, 32);
 	always @(*) begin
+	    $display("---begin execute---");
 		case (opcode)
 			`OPIMM: begin
 				op_type = 0;
@@ -149,6 +150,26 @@ module stage_3(input[31:0] i_pc,
 				alu_out = i_rs_1 + tmp_4;
 			end		
 		endcase
+		
+		$display("i_pc = %0h", i_pc);
+		$display("i_rs_1 = %0h",i_rs_1);
+		$display("i_rs_2 = %0h",i_rs_2);
+		$display("i_rd_num = %0h",i_rd_num);
+		$display("i_imm_12_i = %0h",i_imm_12_i);
+        $display("i_imm_20 = %0h",i_imm_20);
+        $display("i_imm_12_b = %0h",i_imm_12_b);
+        $display("i_imm_20_i = %0h",i_imm_20_i);
+		$display("i_imm_12_s = %0h",i_imm_12_s);
+		$display("i_opcode = %0h",i_opcode);
+		$display("i_func_3 = %0h",i_func_3);
+		$display("i_func_7 = %0h",i_func_7);
+        $display("rs_2 = %0h",rs_2);
+        $display("rd_num = %0h",rd_num);
+        $display("alu_out = %0h",alu_out);
+        $display("opcode = %0h",opcode);
+        $display("func_3 = %0h",func_3);
+        $display("op_type = %0h",op_type);
+		$display("---end execute---");  
 	end
 endmodule
 

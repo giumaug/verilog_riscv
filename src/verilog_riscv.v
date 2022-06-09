@@ -208,7 +208,7 @@ module verilog_riscv(input i_rst,
                                           .i_op_type_1(1'b0),
                                           .o_val_0(i_val_from_mem_ctr),
                                           .o_val_1(i_if_id_inst));
-
+/*
 	always@(posedge i_clk) begin
 	
 		$display("---begin pc---");
@@ -289,4 +289,5 @@ module verilog_riscv(input i_rst,
         $display("rd = %0h", w_rd);
 		$display("---end write back---");
 	end
+*/
 endmodule

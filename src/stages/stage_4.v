@@ -26,6 +26,7 @@ module stage_4(input[31:0] i_rs_2,
     wire[7:0] tmp_1 = i_val_from_mem_ctr[7:0];
     wire[15:0] tmp_2 = i_val_from_mem_ctr[15:0];
 	always @(*) begin
+	    $display("---begin mem access---");
 		case (i_opcode)
 			`LOAD: begin
 				addr_to_mem_ctr = i_alu_out;
@@ -80,6 +81,22 @@ module stage_4(input[31:0] i_rs_2,
 				op_to_mem_ctr = 1'b0;
 			end
 		endcase
+		
+		$display("i_rs_2 = %0h", i_rs_2);
+		$display("i_rd_num = %0h", i_rd_num);
+		$display("i_alu_out = %0h", i_alu_out);
+		$display("i_opcode = %0h", i_opcode);
+        $display("i_func_3 = %0h", i_func_3);
+        $display("i_op_type = %0h", i_op_type);
+        $display("i_val_from_mem_ctr = %0h", i_val_from_mem_ctr);
+        $display("mem_out = %0h", mem_out);          
+        $display("rd_num = %0h", rd_num);
+        $display("alu_out = %0h", alu_out);
+		$display("op_type = %0h", op_type);
+        $display("addr_to_mem_ctr = %0h", addr_to_mem_ctr);
+        $display("val_to_mem_ctr = %0h", val_to_mem_ctr);
+        $display("op_to_mem_ctr = %0h", op_to_mem_ctr);
+		$display("---end mem access---");
 	end
 endmodule
               
