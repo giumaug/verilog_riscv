@@ -4,7 +4,8 @@
 `include "utils.vh"
 `endif
 
-module stage_5(input[31:0] i_mem_out,         
+module stage_5(input[31:0] i_counter,
+              input[31:0] i_mem_out,         
               input[4:0] i_rd_num,
               input[31:0] i_alu_out,
               input i_op_type,
@@ -13,6 +14,7 @@ module stage_5(input[31:0] i_mem_out,
 
 	always @(*) begin
 	    $display("---begin begin write back---");
+		$display("i_counter = %0h", i_counter);
 		if (i_op_type == 0) rd = i_alu_out;
 		else rd = i_mem_out;		
 		rd_num = i_rd_num;

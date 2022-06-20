@@ -12,7 +12,8 @@
 `include "controllers/memory_controller.v"
 `endif
 
-module verilog_riscv(input i_rst,
+module verilog_riscv(input[31:0] i_counter,
+                     input i_rst,
                      input i_clk,
 			         output[3:0] leds);
 	
@@ -133,12 +134,14 @@ module verilog_riscv(input i_rst,
 					.func_3(ex_mem_func_3),
 					.op_type(ex_mem_op_type));
 
-	stage_1 stage_1_0(.i_b_taken(b_taken),
+	stage_1 stage_1_0(.i_counter(i_counter),
+	                  .i_b_taken(b_taken),
                       .i_pc(pc_0_out),
                       .i_b_pc(b_pc),
                       .pc_out(i_if_id_pc));
 
-	stage_2 stage_2_0(.i_rst(i_rst),
+	stage_2 stage_2_0(.i_counter(i_counter),
+	                  .i_rst(i_rst),
 	                  .i_reg_op(i_clk),
 	                  .i_w_rd(w_rd),
                       .i_w_rd_num(w_rd_num),
@@ -158,7 +161,8 @@ module verilog_riscv(input i_rst,
                       .imm_20_i(i_id_ex_imm_20_i),
 					  .imm_12_s(i_id_ex_imm_12_s));
 					
-	stage_3 stage_3_0(.i_pc(id_ex_pc),
+	stage_3 stage_3_0(.i_counter(i_counter),
+	           .i_pc(id_ex_pc),
 			   .i_rs_1(id_ex_rs_1),
 			   .i_rs_2(id_ex_rs_2),
 			   .i_rd_num(id_ex_rd_num),
@@ -177,7 +181,8 @@ module verilog_riscv(input i_rst,
                .func_3(i_ex_mem_func_3),
                .op_type(i_ex_mem_op_type));
                
-	stage_4 stage_4_0(.i_rs_2(i_ex_mem_rs_2),
+	stage_4 stage_4_0(.i_counter(i_counter),
+	          .i_rs_2(i_ex_mem_rs_2),
               .i_rd_num(i_ex_mem_rd_num),
               .i_alu_out(i_ex_mem_alu_out),
               .i_opcode(i_ex_mem_opcode),
@@ -192,7 +197,8 @@ module verilog_riscv(input i_rst,
               .val_to_mem_ctr(val_to_mem_ctr),
               .op_to_mem_ctr(op_to_mem_ctr));
               
-     stage_5 stage_5_0(.i_mem_out(mem_wb_mem_out),         
+     stage_5 stage_5_0(.i_counter(i_counter),
+                       .i_mem_out(mem_wb_mem_out),         
                        .i_rd_num(mem_wb_rd_num),
                        .i_alu_out(mem_wb_alu_out),
                        .i_op_type(mem_wb_op_type),

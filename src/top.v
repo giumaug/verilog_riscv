@@ -8,7 +8,7 @@ module top();
 	reg rst;
 	reg[31:0] counter;
 
-	verilog_riscv verilog_riscv_0(.i_clk(clk), .i_rst(rst));
+	verilog_riscv verilog_riscv_0(.i_counter(counter), .i_clk(clk), .i_rst(rst));
 
 	always #5 clk = ~clk;
 

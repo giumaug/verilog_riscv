@@ -4,7 +4,8 @@
 `include "utils.vh"
 `endif
 
-module stage_4(input[31:0] i_rs_2,
+module stage_4(input[31:0] i_counter,
+              input[31:0] i_rs_2,
               input[4:0] i_rd_num,
               input[31:0] i_alu_out,
               input[6:0] i_opcode,
@@ -27,6 +28,7 @@ module stage_4(input[31:0] i_rs_2,
     wire[15:0] tmp_2 = i_val_from_mem_ctr[15:0];
 	always @(*) begin
 	    $display("---begin mem access---");
+		$display("i_counter = %0h", i_counter);
 		case (i_opcode)
 			`LOAD: begin
 				addr_to_mem_ctr = i_alu_out;

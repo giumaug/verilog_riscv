@@ -5,7 +5,8 @@
 `include "memory/register_file.v"
 `endif
 
-module stage_2(input i_rst,
+module stage_2(input[31:0] i_counter,
+               input i_rst,
                input i_reg_op,
 			   input[31:0] i_w_rd,
                input[4:0] i_w_rd_num,
@@ -61,8 +62,9 @@ module stage_2(input i_rst,
 								  .rs_1(rs_1),
 					              .rs_2(rs_2));
 					           
-    always@(i_inst) begin
+    always@(opcode, rs_1, rs_2) begin
         $display("---begin decode---");
+        $display("i_counter = %0h", i_counter);
 		$display("i_w_rd = %0h", i_w_rd);
         $display("i_w_rd_num= %0h", i_w_rd_num);
         $display("i_inst = %0h", i_inst);

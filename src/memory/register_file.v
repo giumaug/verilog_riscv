@@ -1,3 +1,8 @@
+`ifndef REGISTER_FILE         
+`define REGISTER_FILE
+`include "constants.vh"
+`endif
+
 module register_file(input i_rst,
 					 input[4:0] i_reg_num_1,
                      input[4:0] i_reg_num_2,
@@ -11,8 +16,11 @@ module register_file(input i_rst,
 	reg[31:0] registers[31:0];
 
 	always@(i_rst) begin
+		registers[0] <= 0;
+		registers[1] <= 0;
+		registers[2] <= `STACK_ADDRESS;
 		if (i_rst == 1) begin
-			for (i = 0; i < 32; i++) begin
+			for (i = 3; i < 32; i++) begin
 				registers[i] <= 0;
 			end
 		end

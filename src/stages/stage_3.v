@@ -4,7 +4,8 @@
 `include "utils.vh"
 `endif
 
-module stage_3(input[31:0] i_pc,
+module stage_3(input[31:0] i_counter,
+			   input[31:0] i_pc,
 			   input[31:0] i_rs_1,
 			   input[31:0] i_rs_2,
 			   input[4:0] i_rd_num,
@@ -36,6 +37,7 @@ module stage_3(input[31:0] i_pc,
 	wire[31:0] tmp_4 = `SIGN_EXTEND(i_imm_12_s, 12, 32);
 	always @(*) begin
 	    $display("---begin execute---");
+	    $display("i_counter = %0h", i_counter);
 		case (opcode)
 			`OPIMM: begin
 				op_type = 0;
