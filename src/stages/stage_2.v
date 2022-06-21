@@ -14,6 +14,7 @@ module stage_2(input[31:0] i_counter,
 			   input[31:0] i_pc,
 			   output b_taken,
                output[31:0] b_pc,
+               output[31:0] pc,
                output[31:0] rs_1,
                output[31:0] rs_2,
                output[4:0] rd_num,
@@ -40,6 +41,7 @@ module stage_2(input[31:0] i_counter,
 	assign imm_12_b = {i_inst[31], i_inst[7], i_inst[30:25], i_inst[11:8]};
 	assign imm_20_i = {i_inst[31:12]};
 	assign imm_12_s = {i_inst[31:25], i_inst[11:7]};
+	assign pc = i_pc;
 	
 	branch_unit branch_unit_0(.i_pc(i_pc),
 							  .i_opcode(opcode),
@@ -62,27 +64,30 @@ module stage_2(input[31:0] i_counter,
 								  .rs_1(rs_1),
 					              .rs_2(rs_2));
 					           
-    always@(opcode, rs_1, rs_2) begin
-        $display("---begin decode---");
-        $display("i_counter = %0h", i_counter);
-		$display("i_w_rd = %0h", i_w_rd);
-        $display("i_w_rd_num= %0h", i_w_rd_num);
-        $display("i_inst = %0h", i_inst);
-        $display("i_pc = %0h", i_pc);
-        $display("b_taken = %0h", b_taken);
-        $display("b_pc = %0h", b_pc);
-        $display("rs_1 = %0h", rs_1);
-        $display("rs_2 = %0h", rs_2);
-		$display("rd_num = %0h", rd_num);
-		$display("opcode = %0h", opcode);
-        $display("func_7 = %0h", func_7);
-        $display("func_3 = %0h", func_3);
-        $display("imm_12_i = %0h", imm_12_i);
-        $display("imm_20 = %0h", imm_20);
-        $display("imm_12_b = %0h", imm_12_b);
-        $display("imm_20_i = %0h", imm_20_i);
-		$display("imm_12_s = %0h", imm_12_s);
-		$display("---end decode---");  
+    always@(opcode, rs_1, rs_2, i_reg_op) begin
+    //always@(i_counter) begin
+        $strobe("---begin decode---");
+        $strobe("i_reg_op = %0h", i_reg_op);
+        $strobe("i_counter = %0h", i_counter);
+		$strobe("i_w_rd = %0h", i_w_rd);
+        $strobe("i_w_rd_num= %0h", i_w_rd_num);
+        $strobe("i_inst = %0h", i_inst);
+        $strobe("i_pc = %0h", i_pc);
+        $strobe("b_taken = %0h", b_taken);
+        $strobe("b_pc = %0h", b_pc);
+        $strobe("rs_1 = %0h", rs_1);
+        $strobe("rs_2 = %0h", rs_2);
+		$strobe("rd_num = %0h", rd_num);
+		$strobe("opcode = %0h", opcode);
+        $strobe("func_7 = %0h", func_7);
+        $strobe("func_3 = %0h", func_3);
+        $strobe("imm_12_i = %0h", imm_12_i);
+        $strobe("imm_20 = %0h", imm_20);
+        $strobe("imm_12_b = %0h", imm_12_b);
+        $strobe("imm_20_i = %0h", imm_20_i);
+		$strobe("imm_12_s = %0h", imm_12_s);
+		$strobe("time is %0t",$time);
+		$strobe("---end decode---");  
     end
 					              
 endmodule

@@ -10,7 +10,8 @@ module top_mux();
 
 	always #5 clk = ~clk;
 	
-	mux mux_0(.i_in_1(val_1), //adder_0_out
+	mux mux_0(.i_counter(counter),
+              .i_in_1(val_1), //adder_0_out
 			  .i_in_2(val_2),  //i_b_pc
 			  .i_sel(sel),
               .out(val_out));

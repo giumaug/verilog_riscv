@@ -33,6 +33,8 @@ module id_ex(input i_rst,
 		imm_12_i <= i_imm_12_i;
         imm_20 <= i_imm_20;
         imm_12_b <= i_imm_12_b;
+        imm_20_i <= i_imm_20_i;
+		imm_12_s <= i_imm_12_s;
 		opcode <= i_opcode;
 		func_3 <= i_func_3;
 		func_7 <= i_func_7;
