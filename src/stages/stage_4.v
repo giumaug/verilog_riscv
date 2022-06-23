@@ -4,8 +4,7 @@
 `include "utils.vh"
 `endif
 
-module stage_4(input[31:0] i_counter,
-              input[31:0] i_rs_2,
+module stage_4(input[31:0] i_rs_2,
               input[4:0] i_rd_num,
               input[31:0] i_alu_out,
               input[6:0] i_opcode,
@@ -27,8 +26,8 @@ module stage_4(input[31:0] i_counter,
     wire[7:0] tmp_1 = i_val_from_mem_ctr[7:0];
     wire[15:0] tmp_2 = i_val_from_mem_ctr[15:0];
 	always @(*) begin
-	    $strobe("---begin mem access---");
-		$strobe("i_counter = %0h", i_counter);
+	    //$strobe("---begin mem access---");
+		//$strobe("i_counter = %0h", i_counter);
 		case (i_opcode)
 			`LOAD: begin
 				addr_to_mem_ctr = i_alu_out;
@@ -36,23 +35,23 @@ module stage_4(input[31:0] i_counter,
 				val_to_mem_ctr = 32'b0;
 				case (i_func_3)
 					`LB: begin
-						$strobe("instruction LB");
+						//$strobe("instruction LB");
 						mem_out = `SIGN_EXTEND(tmp_1, 8, 32);
 					end
 					`LH: begin
-						$strobe("instruction LH");
+						//$strobe("instruction LH");
 						mem_out = `SIGN_EXTEND(tmp_2, 16, 32);
 					end
 					`LW: begin
-						$strobe("instruction LW");
+						//$strobe("instruction LW");
 						mem_out = i_val_from_mem_ctr;
 					end
 					`LBU: begin
-						$strobe("instruction LBU");
+						//$strobe("instruction LBU");
 						mem_out = `ZERO_EXTEND(tmp_1, 8, 32);
 					end
 					`LHU: begin
-						$strobe("instruction LHU");
+						//$strobe("instruction LHU");
 						mem_out = `ZERO_EXTEND(tmp_2, 16, 32);
 					end
 				endcase
@@ -63,15 +62,15 @@ module stage_4(input[31:0] i_counter,
 				mem_out = 32'b0;
 				case (i_func_3)
 					`SB: begin
-						$strobe("instruction SB");
+						//$strobe("instruction SB");
 						val_to_mem_ctr = i_rs_2[7:0];
 					end
 					`SH: begin
-						$strobe("instruction SH");
+						//$strobe("instruction SH");
 						val_to_mem_ctr = i_rs_2[15:0];
 					end
 					`SW: begin
-						$strobe("instruction SW");
+						//$strobe("instruction SW");
 						val_to_mem_ctr = i_rs_2;
 					end
 				endcase
@@ -84,6 +83,7 @@ module stage_4(input[31:0] i_counter,
 			end
 		endcase
 		
+/*
 		$strobe("i_rs_2 = %0h", i_rs_2);
 		$strobe("i_rd_num = %0h", i_rd_num);
 		$strobe("i_alu_out = %0h", i_alu_out);
@@ -100,6 +100,8 @@ module stage_4(input[31:0] i_counter,
         $strobe("op_to_mem_ctr = %0h", op_to_mem_ctr);
         $strobe("time is %0t",$time);
 		$strobe("---end mem access---");
+*/
+
 	end
 endmodule
               

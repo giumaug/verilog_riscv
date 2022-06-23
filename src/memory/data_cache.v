@@ -25,7 +25,7 @@ module data_cache #(parameter CACHE_SIZE =  `_DATA_CACHE_SIZE,
 			          mem_cell[i_address + 2 - CACHE_OFFSET], 
 			          mem_cell[i_address + 1 - CACHE_OFFSET], 
 			          mem_cell[i_address - CACHE_OFFSET]};
-			$strobe("--------------i_address is %0h ", address);
+			$strobe("--------------i_address is %0h ", i_address);
 			$strobe("--------------o_val is %0h ", o_val);
 			$strobe("time is %0t",$time);
 		end else if (i_op_type == 1) begin

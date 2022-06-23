@@ -1,4 +1,6 @@
-module id_ex(input i_rst,
+module id_ex(input[31:0] i_debug_pc,
+			 input[31:0] i_debug_inst,
+             input i_rst,
              input i_clk,
 			 input [31:0] i_pc,
 			 input [31:0] i_rs_1,
@@ -11,7 +13,9 @@ module id_ex(input i_rst,
 			 input[11:0] i_imm_12_s,
 			 input [6:0] i_opcode,
 			 input [2:0] i_func_3,
-			 input [6:0] i_func_7,		
+			 input [6:0] i_func_7,
+			 output reg[31:0] debug_pc,
+			 output reg[31:0] debug_inst,
 			 output reg[31:0] pc,
 			 output reg[31:0] rs_1,
 			 output reg[31:0] rs_2,
@@ -38,6 +42,8 @@ module id_ex(input i_rst,
 		opcode <= i_opcode;
 		func_3 <= i_func_3;
 		func_7 <= i_func_7;
+		debug_pc <= i_debug_pc;
+	    debug_inst <= i_debug_inst;
     end
 
 	always@(i_rst) begin
@@ -52,6 +58,8 @@ module id_ex(input i_rst,
 			opcode <= 0;
 			func_3 <= 0;
 			func_7 <= 0;
+			debug_pc <= 0;
+	        debug_inst <= 0;
 		end
 	end
 endmodule

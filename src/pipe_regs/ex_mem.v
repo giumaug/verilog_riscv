@@ -1,4 +1,6 @@
-module ex_mem(input i_clk,
+module ex_mem(input[31:0] i_debug_pc,
+			  input[31:0] i_debug_inst,
+              input i_clk,
 			  input i_rst,
 			  //input[31:0] i_rs_1,
               input[31:0] i_rs_2,
@@ -7,6 +9,8 @@ module ex_mem(input i_clk,
               input[6:0] i_opcode,
               input[2:0] i_func_3,
               input i_op_type,
+              output reg[31:0] debug_pc,
+			  output reg[31:0] debug_inst,
               //output reg[31:0] rs_1,
               output reg[31:0] rs_2,
               output reg[4:0] rd_num,
@@ -20,8 +24,10 @@ module ex_mem(input i_clk,
         rd_num <= i_rd_num;
         alu_out <= i_alu_out;
         opcode <= i_opcode;
-        func_3 <= func_3;
+        func_3 <= i_func_3;
         op_type <= i_op_type;
+        debug_pc <= i_debug_pc;
+	    debug_inst <= i_debug_inst;
     end
     
     always@(i_rst) begin
@@ -32,6 +38,8 @@ module ex_mem(input i_clk,
 			opcode <= 0;
 			func_3 <= 0;
 			op_type <= 0;
+			debug_pc <= 0;
+	        debug_inst <= 0;
 		end
 	end
 endmodule
