@@ -161,7 +161,7 @@ module verilog_riscv(input[31:0] i_counter,
 					.op_type(ex_mem_op_type));
 					
 	mem_wb mem_wb_0(.i_debug_pc(i_mem_wb_debug_pc),
-			        .i_debug_inst(i_ex_mem_debug_inst),
+			        .i_debug_inst(i_mem_wb_debug_inst),
                     .i_clk(i_clk),
 			        .i_rst(i_rst),
 			        .i_mem_out(i_mem_wb_mem_out),         
@@ -169,7 +169,7 @@ module verilog_riscv(input[31:0] i_counter,
                     .i_alu_out(i_mem_wb_alu_out),
                     .i_op_type(i_mem_wb_op_type),
                     .debug_pc(mem_wb_debug_pc),
-			        .debug_inst(mem_wb_mem_debug_inst),
+			        .debug_inst(mem_wb_debug_inst),
                     .mem_out(mem_wb_mem_out),         
                     .rd_num(mem_wb_rd_num),
                     .alu_out(mem_wb_alu_out),
@@ -186,6 +186,9 @@ module verilog_riscv(input[31:0] i_counter,
                       .i_w_rd_num(w_rd_num),
                       .i_inst(if_id_inst),
                       .i_pc(if_id_pc),
+                      .i_id_ex_rd_num(i_id_ex_rd_num),
+	                  .i_ex_mem_rd_num(i_ex_mem_rd_num),
+	                  .i_mem_wb_rd_num(i_mem_wb_rd_num),
                       .b_taken(b_taken),
                       .b_pc(b_pc),
                       .pc(i_id_ex_pc),
@@ -221,11 +224,11 @@ module verilog_riscv(input[31:0] i_counter,
                .op_type(i_ex_mem_op_type));
                
 	stage_4 stage_4_0(.i_rs_2(i_ex_mem_rs_2),
-              .i_rd_num(i_ex_mem_rd_num),
-              .i_alu_out(i_ex_mem_alu_out),
-              .i_opcode(i_ex_mem_opcode),
-              .i_func_3(i_ex_mem_func_3),
-              .i_op_type(i_ex_mem_op_type),
+              .i_rd_num(ex_mem_rd_num),
+              .i_alu_out(ex_mem_alu_out),
+              .i_opcode(ex_mem_opcode),
+              .i_func_3(ex_mem_func_3),
+              .i_op_type(ex_mem_op_type),
               .i_val_from_mem_ctr(i_val_from_mem_ctr),
               .mem_out(i_mem_wb_mem_out),         
               .rd_num(i_mem_wb_rd_num),
@@ -260,17 +263,18 @@ module verilog_riscv(input[31:0] i_counter,
 		$display("---end pc---");
 	
 		$display("---begin fetch---");
+		$display("i_counter = %0h", i_counter);
+		$display("time is %0t",$time);
 		$display("i_b_taken = %0h", b_taken);
 		$display("i_pc = %0h", pc_0_out);
         $display("pc_out = %0h", i_if_id_pc);
 		$display("---end fetch---");
 		
 		$display("---begin decode---");
-		
-		$display("if_id_debug_pc = %0h", if_id_debug_pc);
-        $display("if_id_debug_inst = %0h", if_id_debug_inst);
-        
-		
+		$display("i_counter = %0h", i_counter);
+		$display("time is %0t",$time);
+		$display("if_id_debug_pc = %0h", i_id_ex_debug_pc);
+        $display("if_id_debug_inst = %0h", i_id_ex_debug_inst);
 		$display("i_w_rd = %0h", w_rd);
         $display("i_w_rd_num= %0h", w_rd_num);
         $display("i_inst = %0h", if_id_inst);
@@ -291,8 +295,10 @@ module verilog_riscv(input[31:0] i_counter,
 		$display("---end decode---");
 		
 		$display("---begin execute---");
-		$display("id_ex_debug_pc = %0h", id_ex_debug_pc);
-        $display("id_ex_debug_inst = %0h", id_ex_debug_inst);
+		$display("i_counter = %0h", i_counter);
+		$display("time is %0t",$time);
+		$display("id_ex_debug_pc = %0h", i_ex_mem_debug_pc);
+        $display("id_ex_debug_inst = %0h", i_ex_mem_debug_inst);
 		$display("i_pc = %0h", id_ex_pc);
 		$display("i_rs_1 = %0h", id_ex_rs_1);
 		$display("i_rs_2 = %0h", id_ex_rs_2);
@@ -311,30 +317,34 @@ module verilog_riscv(input[31:0] i_counter,
         $display("opcode = %0h", i_ex_mem_opcode);
         $display("func_3 = %0h", i_ex_mem_func_3);
         $display("op_type = %0h", i_ex_mem_op_type);
-        decode_inst(i_id_ex_opcode, i_id_ex_func_7, i_id_ex_func_3);
+        decode_inst(i_ex_mem_debug_inst);
 		$display("---end execute---");
 		
 		$display("---begin mem access---");
-		$display("ex_mem_debug_pc = %0h", ex_mem_debug_pc);
-        $display("ex_mem_debug_inst = %0h", ex_mem_debug_inst);
-		$display("i_rs_2 = %0h", i_ex_mem_rs_2);
-		$display("i_rd_num = %0h", i_ex_mem_rd_num);
-		$display("i_alu_out = %0h", i_ex_mem_alu_out);
-		$display("i_opcode = %0h", i_ex_mem_opcode);
-        $display("i_func_3 = %0h", i_ex_mem_func_3);
-        $display("i_op_type = %0h", i_ex_mem_op_type);
+		$display("i_counter = %0h", i_counter);
+		$display("time is %0t",$time);
+		$display("ex_mem_debug_pc = %0h", i_mem_wb_debug_pc);
+        $display("ex_mem_debug_inst = %0h", i_mem_wb_debug_inst);
+		$display("i_rs_2 = %0h", ex_mem_rs_2);
+		$display("i_rd_num = %0h", ex_mem_rd_num);
+		$display("i_alu_out = %0h", ex_mem_alu_out);
+		$display("i_opcode = %0h", ex_mem_opcode);
+        $display("i_func_3 = %0h", ex_mem_func_3);
+        $display("i_op_type = %0h", ex_mem_op_type);
         $display("i_val_from_mem_ctr = %0h", i_val_from_mem_ctr);
-        $display("mem_out = %0h", i_mem_wb_mem_out);          
-        $display("rd_num = %0h", i_mem_wb_rd_num);
-        $display("alu_out = %0h", i_mem_wb_alu_out);
-		$display("op_type = %0h", i_mem_wb_op_type);
+        $display("mem_out = %0h", mem_wb_mem_out);          
+        $display("rd_num = %0h", mem_wb_rd_num);
+        $display("alu_out = %0h", mem_wb_alu_out);
+		$display("op_type = %0h", mem_wb_op_type);
         $display("addr_to_mem_ctr = %0h", addr_to_mem_ctr);
         $display("val_to_mem_ctr = %0h", val_to_mem_ctr);
         $display("op_to_mem_ctr = %0h", op_to_mem_ctr);
-        decode_inst(i_ex_mem_opcode,0 , i_id_ex_func_3);
+        decode_inst(i_mem_wb_debug_inst);
 		$display("---end mem access---");
 		
-		$display("---begin begin write back---");
+		$display("---begin write back---");
+		$display("i_counter = %0h", i_counter);
+		$display("time is %0t",$time);
 		$display("mem_wb_debug_pc = %0h", mem_wb_debug_pc);
         $display("mem_wb_debug_inst = %0h", mem_wb_debug_inst);
 		$display("i_mem_out = %0h", mem_wb_mem_out);
@@ -343,18 +353,15 @@ module verilog_riscv(input[31:0] i_counter,
         $display("i_op_type = %0h", mem_wb_op_type);
         $display("rd_num = %0h", w_rd_num);
         $display("rd = %0h", w_rd);
+        decode_inst(mem_wb_debug_inst);
 		$display("---end write back---");
 	end
 	
-	task decode_inst( 
-		input[6:0] i_opcode,
-        input[6:0] i_func_7,
-        input[2:0] i_func_3);
-        
+	task decode_inst(input[31:0] i_inst);
 		begin
-			case (i_opcode)
+			case (i_inst[6:0])
 			    `BRANCH: begin
-					case (i_func_3)
+					case (i_inst[14:12])
 						`BEQ: begin
 							$display("instruction BEQ");
 						end
@@ -376,7 +383,7 @@ module verilog_riscv(input[31:0] i_counter,
 					endcase
 				end
 				`OPIMM: begin
-					case (i_func_3)
+					case (i_inst[14:12])
 						`ADDI: begin
 							$display("instruction ADDI");
 						end
@@ -399,14 +406,16 @@ module verilog_riscv(input[31:0] i_counter,
 							$display("instruction SLLI");
 						end
 						`SRLISRAI: begin
-							$display("instruction SRLISRAI");
+							if (i_inst[31:25] == `SRLI)	$display("instruction SRLI");
+							else if (i_inst[31:25] == `SRAI) $display("instruction SRAI");
 						end
 					endcase
 				end
 				`OP: begin
-					case (i_func_3)
+					case (i_inst[14:12])
 						`ADDSUB: begin
-							$display("instruction ADDSUB");
+							if (i_inst[31:25] == `ADD) $display("instruction ADD");
+							else if (i_inst[31:25] == `SUB) $display("instruction SUB");
 						end
 						`SLT: begin
 							$display("instruction SLT");
@@ -428,6 +437,8 @@ module verilog_riscv(input[31:0] i_counter,
 						end
 						`SRLSRA: begin
 							$display("instruction SRLSRA");
+							if (i_inst[31:25] == `SRL) $display("instruction SRL");
+						else if (i_inst[31:25] == `SRA) $display("instruction SRA");
 						end
 					endcase
 				end
@@ -449,7 +460,7 @@ module verilog_riscv(input[31:0] i_counter,
 				`STORE: begin
 					$display("instruction STORE");
 				end		
-				endcase
+			endcase
 		end  
 	endtask  
 endmodule
