@@ -140,7 +140,7 @@ module stage_3(input[31:0] i_pc,
 				alu_out = {i_imm_20_i, 12'b0} + i_pc;
 			end
 			`LOAD: begin
-				//$strobe("instruction LOAD");
+				$strobe("instruction LOAD");
 				op_type = 1;
 				alu_out = i_rs_1 + tmp_1;
 			end
@@ -148,7 +148,11 @@ module stage_3(input[31:0] i_pc,
 				//$strobe("instruction STORE");
 				op_type = 1;
 				alu_out = i_rs_1 + tmp_4;
-			end		
+			end
+			default: begin
+				op_type = 0;
+				alu_out = 0;
+			end	
 		endcase
 		
 /*

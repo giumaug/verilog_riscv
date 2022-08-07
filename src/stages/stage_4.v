@@ -12,14 +12,13 @@ module stage_4(input[31:0] i_rs_2,
               input i_op_type,
               input[31:0] i_val_from_mem_ctr,
               output reg[31:0] mem_out,         
-              output[4:0] rd_num,
+              output reg[4:0] rd_num,
               output[31:0] alu_out,
               output op_type,
               output reg[31:0] addr_to_mem_ctr,
               output reg[31:0] val_to_mem_ctr,
               output reg op_to_mem_ctr);
               
-    assign rd_num = i_rd_num;
     assign alu_out = i_alu_out;
     assign op_type = i_op_type;
             
@@ -30,6 +29,7 @@ module stage_4(input[31:0] i_rs_2,
 		//$strobe("i_counter = %0h", i_counter);
 		case (i_opcode)
 			`LOAD: begin
+				rd_num = i_rd_num;
 				addr_to_mem_ctr = i_alu_out;
 				op_to_mem_ctr = 1'b0;
 				val_to_mem_ctr = 32'b0;
@@ -57,6 +57,7 @@ module stage_4(input[31:0] i_rs_2,
 				endcase
 			end
 			`STORE: begin
+				rd_num = 0;
 				addr_to_mem_ctr = i_alu_out;
 				op_to_mem_ctr = 1'b1;
 				mem_out = 32'b0;
@@ -70,20 +71,24 @@ module stage_4(input[31:0] i_rs_2,
 						val_to_mem_ctr = i_rs_2[15:0];
 					end
 					`SW: begin
-						//$strobe("instruction SW");
+						$strobe("iinstruction SW--");
+						$strobe("time is %0t",$time);
+						$strobe("i_rs_2 = %0h", i_rs_2);
 						val_to_mem_ctr = i_rs_2;
 					end
 				endcase
 			end
 			default : begin
+			    rd_num = i_rd_num;
 				mem_out = 32'b0;
 				addr_to_mem_ctr = 32'b0;
 				val_to_mem_ctr = 32'b0;
 				op_to_mem_ctr = 1'b0;
+				
 			end
 		endcase
 		
-/*
+		$strobe("--------------------inside mem-------------------");
 		$strobe("i_rs_2 = %0h", i_rs_2);
 		$strobe("i_rd_num = %0h", i_rd_num);
 		$strobe("i_alu_out = %0h", i_alu_out);
@@ -100,7 +105,7 @@ module stage_4(input[31:0] i_rs_2,
         $strobe("op_to_mem_ctr = %0h", op_to_mem_ctr);
         $strobe("time is %0t",$time);
 		$strobe("---end mem access---");
-*/
+		$strobe("-------------------------------------------------");
 
 	end
 endmodule

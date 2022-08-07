@@ -13,8 +13,8 @@ module stage_2(input i_rst,
 			   input[31:0] i_inst,
 			   input[31:0] i_pc,
 			   input[4:0] i_id_ex_rd_num,
-	           input[4:0 ]i_ex_mem_rd_num,
-	           input[4:0] i_mem_wb_rd_num,
+	           input[4:0] i_ex_mem_rd_num,
+	           output reg stall,
 			   output reg b_taken,
                output reg[31:0] b_pc,
                output reg[31:0] pc,
@@ -33,15 +33,17 @@ module stage_2(input i_rst,
 	wire[4:0] i_reg_num_1 = i_inst[19:15];
 	wire[4:0] i_reg_num_2 = i_inst[24:20];
 	wire[6:0] i_opcode = i_inst[6:0];
+	wire[4:0] _rd_num = i_inst[11:7];
 	wire[31:0] _rs_1;
 	wire[31:0] _rs_2;
 	wire[31:0] _b_pc;
 	wire _b_taken;
-	wire stall;
+	wire _stall;
 	
 	always @(*) begin
-		if (stall == 0) begin
-			rd_num = i_inst[11:7];
+		if (_stall == 0) begin
+		    //$strobe("non stalling");
+			rd_num = _rd_num;
 			opcode = i_inst[6:0]; 
 			func_7 = i_inst[31:25];
 			func_3 = i_inst[14:12];
@@ -57,6 +59,7 @@ module stage_2(input i_rst,
 	        b_taken = _b_taken;
 		end
 		else begin
+			//$strobe("stalling");
 			rd_num = 0;
 			opcode = 0; 
 			func_7 = 0;
@@ -72,6 +75,7 @@ module stage_2(input i_rst,
 	        b_pc = 0;
 	        b_taken = 0;
 		end
+		stall = _stall;
 	end
 	
 	branch_unit branch_unit_0(.i_pc(i_pc),
@@ -100,8 +104,7 @@ module stage_2(input i_rst,
 	                                    .i_reg_num_2(i_reg_num_2),
 	                                    .i_id_ex_rd_num(i_id_ex_rd_num),
 	                                    .i_ex_mem_rd_num(i_ex_mem_rd_num),
-	                                    .i_mem_wb_rd_num(i_mem_wb_rd_num),
-	                                    .stall(stall));
+	                                    .stall(_stall));
 			
 /*		           
     always@(opcode, rs_1, rs_2, i_reg_op) begin
