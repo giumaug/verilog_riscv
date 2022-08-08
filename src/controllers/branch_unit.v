@@ -42,7 +42,11 @@ module branch_unit(input[31:0] i_pc,
 				if (i_imm_12_i[11] == 0) b_pc = (i_rs_1 + tmp_3) & 4094;
 				else b_pc = (i_rs_1 - tmp_4) & 4094;
 				b_taken = 1;
-				$display("instruction JALR");
+				$display("instruction JALR---");
+				$display("b_pc = %0h", b_pc);
+				$display("b_taken = %0h", b_taken);
+				$display("i_imm_12_i = %0h", i_imm_12_i);
+				$display("i_rs_1 = %0h", i_rs_1);
 			end
 			`BRANCH: begin
 				//if (i_imm_12_b[11] == 0) b_pc = i_pc + {{19{i_imm_12_b[11]}}, {i_imm_12_b, 1'b0}};

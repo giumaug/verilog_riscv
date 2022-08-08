@@ -71,6 +71,7 @@ module verilog_riscv(input[31:0] i_counter,
     wire mem_wb_op_type;
               
 	wire[31:0] pc_0_out;
+	wire[31:0] pc_0_in;
 	wire[31:0] b_pc;
 	wire b_taken;
 	wire[31:0] i_val_from_mem_ctr_0;
@@ -100,10 +101,11 @@ module verilog_riscv(input[31:0] i_counter,
 	assign i_if_id_debug_pc = pc_0_out;
 	assign i_if_id_debug_inst = i_if_id_inst;
 	assign i_clk_stall = _stall ? 1'b1 : i_clk;
+	assign addr_to_mem_ctr_1 = i_if_id_pc;
 	
 	pc pc_0(.i_clk(i_clk_stall), 
             .i_rst(i_rst),
-            .i_in(i_if_id_pc),
+            .i_in(pc_0_in),
             .out(pc_0_out));
             
 	if_id if_id_0(.i_debug_pc(i_if_id_debug_pc),
@@ -186,9 +188,9 @@ module verilog_riscv(input[31:0] i_counter,
                       .i_pc(pc_0_out),
                       .i_b_pc(b_pc),
                       .i_val_from_mem_ctr(i_val_from_mem_ctr_1),
-                      .pc(addr_to_mem_ctr_1),
+                      .pc(i_if_id_pc),
                       .inst(i_if_id_inst),
-                      .pc_next(i_if_id_pc));
+                      .pc_next(pc_0_in));
 
 	stage_2 stage_2_0(.i_rst(i_rst),
 	                  .i_reg_op(i_clk),
