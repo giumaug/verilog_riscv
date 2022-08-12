@@ -41,6 +41,29 @@ module stage_2(input i_rst,
 	wire _stall;
 	
 	always @(*) begin
+		$strobe("---inside decode---");
+		$strobe("i_reg_num_1 = %0h", i_reg_num_1);
+		$strobe("i_reg_num_2 = %0h", i_reg_num_2);
+        $strobe("i_reg_op = %0h", i_reg_op);
+		$strobe("i_w_rd = %0h", i_w_rd);
+        $strobe("i_w_rd_num= %0h", i_w_rd_num);
+        $strobe("i_inst = %0h", i_inst);
+        $strobe("i_pc = %0h", i_pc);
+        $strobe("b_taken = %0h", b_taken);
+        $strobe("b_pc = %0h", b_pc);
+        $strobe("rs_1 = %0h", rs_1);
+        $strobe("rs_2 = %0h", rs_2);
+		$strobe("rd_num = %0h", rd_num);
+		$strobe("opcode = %0h", opcode);
+        $strobe("func_7 = %0h", func_7);
+        $strobe("func_3 = %0h", func_3);
+        $strobe("imm_12_i = %0h", imm_12_i);
+        $strobe("imm_20 = %0h", imm_20);
+        $strobe("imm_12_b = %0h", imm_12_b);
+        $strobe("imm_20_i = %0h", imm_20_i);
+		$strobe("imm_12_s = %0h", imm_12_s);
+		$strobe("time is %0t",$time);
+		$strobe("---end decode---");  
 		if (_stall == 0) begin
 		    //$strobe("non stalling");
 			rd_num = _rd_num;

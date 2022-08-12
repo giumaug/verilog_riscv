@@ -15,7 +15,7 @@ module top();
 	initial begin
 		clk <= 0;
 		rst <= 1;
-		counter <= 0;
+		counter <= 1;
 	end
 
 	always @(posedge(clk)) begin

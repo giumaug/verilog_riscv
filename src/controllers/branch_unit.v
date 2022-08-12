@@ -67,7 +67,9 @@ module branch_unit(input[31:0] i_pc,
                   	`BLT: begin
 						if (`SIGNED(i_rs_1) < `SIGNED(i_rs_2)) b_taken = 1;
 						else b_taken = 0;
-						$display("instruction BLT");	
+						$display("instruction BLT---");
+						$display("i_rs_1 = %0h", i_rs_1);
+						$display("i_rs_2 = %0h", i_rs_2);
 					end
 					`BLTU: begin
 						if (`ABS(i_rs_1, 32) < `ABS(i_rs_2, 32)) b_taken = 1;

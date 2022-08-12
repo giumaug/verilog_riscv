@@ -266,73 +266,87 @@ module verilog_riscv(input[31:0] i_counter,
                                           .i_op_type_1(1'b0),
                                           .o_val_0(i_val_from_mem_ctr_0),
                                           .o_val_1(i_val_from_mem_ctr_1));
-                                          
+    //Per ogni stage stampo la relazioe ingresso/uscita. Considero l'uscita disponibile a t+T con t = istante
+    //in cui arriva il fronte di salita del clock.
+    //i_counter conta il numero di elaborazioni eseguita dallo stage1. Il conteggio parte da 1.                                   
 	always@(posedge i_clk) begin
-	
-		$strobe("---begin pc---");
-		$strobe("i_in = %0h", i_if_id_pc);
-		$strobe("out = %0h", pc_0_out);
-		$strobe("i_counter = %0h", i_counter);
-		$strobe("time is %0t",$time);
-		$strobe("---end pc---");
-	
-		$strobe("---begin fetch---");
-		$strobe("i_counter = %0h", i_counter);
-		$strobe("time is %0t",$time);
-		$strobe("i_b_taken = %0h", b_taken);
-		$strobe("i_pc = %0h", pc_0_out);
-        $strobe("pc_out = %0h", i_if_id_pc);
-		$strobe("---end fetch---");
+		$display("---begin pc---");
+		$display("i_in = %0h", i_if_id_pc);
+		$display("out = %0h", pc_0_out);
+		$display("i_counter = %0h", i_counter);
+		$display("time is %0t",$time);
+		$display("---end pc---");
 		
-		$strobe("---begin decode---");
-		$strobe("i_counter = %0h", i_counter);
-		$strobe("time is %0t",$time);
-		$strobe("if_id_debug_pc = %0h", i_id_ex_debug_pc);
-        $strobe("if_id_debug_inst = %0h", i_id_ex_debug_inst);
-		$strobe("i_w_rd = %0h", w_rd);
-        $strobe("i_w_rd_num= %0h", w_rd_num);
-        $strobe("i_inst = %0h", if_id_inst);
-        $strobe("i_pc = %0h", if_id_pc);
-        $strobe("b_taken = %0h", b_taken);
-        $strobe("b_pc = %0h", b_pc);
-        $strobe("rs_1 = %0h", i_id_ex_rs_1);
-        $strobe("rs_2 = %0h", i_id_ex_rs_2);
-		$strobe("rd_num = %0h", i_id_ex_rd_num);
-		$strobe("opcode = %0h", i_id_ex_opcode);
-        $strobe("func_7 = %0h", i_id_ex_func_7);
-        $strobe("func_3 = %0h", i_id_ex_func_3);
-        $strobe("imm_12_i = %0h", i_id_ex_imm_12_i);
-        $strobe("imm_20 = %0h", i_id_ex_imm_20);
-        $strobe("imm_12_b = %0h", i_id_ex_imm_12_b);
-        $strobe("imm_20_i = %0h", i_id_ex_imm_20_i);
-		$strobe("imm_12_s = %0h", i_id_ex_imm_12_s);
-		$strobe("---end decode---");
+		$display("---begin fetch---");
+		$display("i_counter = %0h", i_counter);
+		$display("time is %0t",$time);
+		$display("i_b_taken = %0h", b_taken); //verificare se corretto
+        $display("i_pc = %0h", pc_0_out);
+        $display("i_b_pc = %0h", b_pc);
+        $display("i_val_from_mem_ctr = %0h", i_val_from_mem_ctr_1);
+	    $display("pc = %0h", i_if_id_pc);
+	    $display("inst = %0h", i_if_id_inst);
+	    $display("pc_next = %0h", pc_0_in);
+	    $display("---end fetch---");
+	   
+		//$display("---begin fetch---");
+		//$display("i_counter = %0h", i_counter);
+		//$display("time is %0t",$time);
+		//$display("inst = %0h", i_if_id_inst);
+		//$display("i_b_taken = %0h", b_taken);
+		//$display("i_pc = %0h", pc_0_out);
+        //$display("pc_out = %0h", i_if_id_pc);
+		//$display("---end fetch---");
 		
-		$strobe("---begin execute---");
-		$strobe("i_counter = %0h", i_counter);
-		$strobe("time is %0t",$time);
-		$strobe("id_ex_debug_pc = %0h", i_ex_mem_debug_pc);
-        $strobe("id_ex_debug_inst = %0h", i_ex_mem_debug_inst);
-		$strobe("i_pc = %0h", id_ex_pc);
-		$strobe("i_rs_1 = %0h", id_ex_rs_1);
-		$strobe("i_rs_2 = %0h", id_ex_rs_2);
-		$strobe("i_rd_num = %0h", id_ex_rd_num);
-		$strobe("i_imm_12_i = %0h", id_ex_imm_12_i);
-        $strobe("i_imm_20 = %0h", id_ex_imm_20);
-        $strobe("i_imm_12_b = %0h", id_ex_imm_12_b);
-        $strobe("i_imm_20_i = %0h", id_ex_imm_20_i);
-		$strobe("i_imm_12_s = %0h", id_ex_imm_12_s);
-		$strobe("i_opcode = %0h", id_ex_opcode);
-		$strobe("i_func_3 = %0h", id_ex_func_3);
-		$strobe("i_func_7 = %0h", id_ex_func_7);
-        $strobe("rs_2 = %0h", i_ex_mem_rs_2);
-        $strobe("rd_num = %0h", i_ex_mem_rd_num);
-        $strobe("alu_out = %0h", i_ex_mem_alu_out);
-        $strobe("opcode = %0h", i_ex_mem_opcode);
-        $strobe("func_3 = %0h", i_ex_mem_func_3);
-        $strobe("op_type = %0h", i_ex_mem_op_type);
+		$display("---begin decode---");
+		$display("i_counter = %0h", i_counter);
+		$display("time is %0t",$time);
+		$display("if_id_debug_pc = %0h", i_id_ex_debug_pc);
+        $display("if_id_debug_inst = %0h", i_id_ex_debug_inst);
+		$display("i_w_rd = %0h", w_rd);
+        $display("i_w_rd_num= %0h", w_rd_num);
+        $display("i_inst = %0h", if_id_inst);
+        $display("i_pc = %0h", if_id_pc);
+        $display("b_taken = %0h", b_taken);
+        $display("b_pc = %0h", b_pc);
+        $display("rs_1 = %0h", i_id_ex_rs_1);
+        $display("rs_2 = %0h", i_id_ex_rs_2);
+		$display("rd_num = %0h", i_id_ex_rd_num);
+		$display("opcode = %0h", i_id_ex_opcode);
+        $display("func_7 = %0h", i_id_ex_func_7);
+        $display("func_3 = %0h", i_id_ex_func_3);
+        $display("imm_12_i = %0h", i_id_ex_imm_12_i);
+        $display("imm_20 = %0h", i_id_ex_imm_20);
+        $display("imm_12_b = %0h", i_id_ex_imm_12_b);
+        $display("imm_20_i = %0h", i_id_ex_imm_20_i);
+		$display("imm_12_s = %0h", i_id_ex_imm_12_s);
+		$display("---end decode---");
+		
+		$display("---begin execute---");
+		$display("i_counter = %0h", i_counter);
+		$display("time is %0t",$time);
+		$display("id_ex_debug_pc = %0h", i_ex_mem_debug_pc);
+        $display("id_ex_debug_inst = %0h", i_ex_mem_debug_inst);
+		$display("i_pc = %0h", id_ex_pc);
+		$display("i_rs_1 = %0h", id_ex_rs_1);
+		$display("i_rs_2 = %0h", id_ex_rs_2);
+		$display("i_rd_num = %0h", id_ex_rd_num);
+		$display("i_imm_12_i = %0h", id_ex_imm_12_i);
+        $display("i_imm_20 = %0h", id_ex_imm_20);
+        $display("i_imm_12_b = %0h", id_ex_imm_12_b);
+        $display("i_imm_20_i = %0h", id_ex_imm_20_i);
+		$display("i_imm_12_s = %0h", id_ex_imm_12_s);
+		$display("i_opcode = %0h", id_ex_opcode);
+		$display("i_func_3 = %0h", id_ex_func_3);
+		$display("i_func_7 = %0h", id_ex_func_7);
+        $display("rs_2 = %0h", i_ex_mem_rs_2);
+        $display("rd_num = %0h", i_ex_mem_rd_num);
+        $display("alu_out = %0h", i_ex_mem_alu_out);
+        $display("opcode = %0h", i_ex_mem_opcode);
+        $display("func_3 = %0h", i_ex_mem_func_3);
+        $display("op_type = %0h", i_ex_mem_op_type);
         decode_inst(i_ex_mem_debug_inst);
-		$strobe("---end execute---");
+		$display("---end execute---");
 		
 		$strobe("---begin mem access---");
 		$strobe("i_counter = %0h", i_counter);
@@ -373,6 +387,7 @@ module verilog_riscv(input[31:0] i_counter,
 	
 	task decode_inst(input[31:0] i_inst);
 		begin
+			$display("instruction code = %0h", i_inst);
 			case (i_inst[6:0])
 			    `BRANCH: begin
 					case (i_inst[14:12])
