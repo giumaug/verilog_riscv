@@ -266,7 +266,7 @@ module verilog_riscv(input[31:0] i_counter,
                                           .i_op_type_1(1'b0),
                                           .o_val_0(i_val_from_mem_ctr_0),
                                           .o_val_1(i_val_from_mem_ctr_1));
-    //Per ogni stage stampo la relazioe ingresso/uscita. Considero l'uscita disponibile a t+T con t = istante
+    //Per ogni stage stampo la relazione ingresso/uscita. Considero l'uscita disponibile a t+T con t = istante
     //in cui arriva il fronte di salita del clock.
     //i_counter conta il numero di elaborazioni eseguita dallo stage1. Il conteggio parte da 1.                                   
 	always@(posedge i_clk) begin
@@ -348,41 +348,41 @@ module verilog_riscv(input[31:0] i_counter,
         decode_inst(i_ex_mem_debug_inst);
 		$display("---end execute---");
 		
-		$strobe("---begin mem access---");
-		$strobe("i_counter = %0h", i_counter);
-		$strobe("time is %0t",$time);
-		$strobe("ex_mem_debug_pc = %0h", i_mem_wb_debug_pc);
-        $strobe("ex_mem_debug_inst = %0h", i_mem_wb_debug_inst);
-		$strobe("i_rs_2 = %0h", ex_mem_rs_2);
-		$strobe("i_rd_num = %0h", ex_mem_rd_num);
-		$strobe("i_alu_out = %0h", ex_mem_alu_out);
-		$strobe("i_opcode = %0h", ex_mem_opcode);
-        $strobe("i_func_3 = %0h", ex_mem_func_3);
-        $strobe("i_op_type = %0h", ex_mem_op_type);
-        $strobe("i_val_from_mem_ctr = %0h", i_val_from_mem_ctr_0);
-        $strobe("mem_out = %0h", i_mem_wb_mem_out);          
-        $strobe("rd_num = %0h", i_mem_wb_rd_num);
-        $strobe("alu_out = %0h", i_mem_wb_alu_out);
-		$strobe("op_type = %0h", i_mem_wb_op_type);
-        $strobe("addr_to_mem_ctr_0 = %0h", addr_to_mem_ctr_0);
-        $strobe("val_to_mem_ctr_0 = %0h", val_to_mem_ctr_0);
-        $strobe("op_to_mem_ctr_0 = %0h", op_to_mem_ctr_0);
+		$display("---begin mem access---");
+		$display("i_counter = %0h", i_counter);
+		$display("time is %0t",$time);
+		$display("ex_mem_debug_pc = %0h", i_mem_wb_debug_pc);
+        $display("ex_mem_debug_inst = %0h", i_mem_wb_debug_inst);
+		$display("i_rs_2 = %0h", ex_mem_rs_2);
+		$display("i_rd_num = %0h", ex_mem_rd_num);
+		$display("i_alu_out = %0h", ex_mem_alu_out);
+		$display("i_opcode = %0h", ex_mem_opcode);
+        $display("i_func_3 = %0h", ex_mem_func_3);
+        $display("i_op_type = %0h", ex_mem_op_type);
+        $display("i_val_from_mem_ctr = %0h", i_val_from_mem_ctr_0);
+        $display("mem_out = %0h", i_mem_wb_mem_out);          
+        $display("rd_num = %0h", i_mem_wb_rd_num);
+        $display("alu_out = %0h", i_mem_wb_alu_out);
+		$display("op_type = %0h", i_mem_wb_op_type);
+        $display("addr_to_mem_ctr_0 = %0h", addr_to_mem_ctr_0);
+        $display("val_to_mem_ctr_0 = %0h", val_to_mem_ctr_0);
+        $display("op_to_mem_ctr_0 = %0h", op_to_mem_ctr_0);
         decode_inst(i_mem_wb_debug_inst);
-		$strobe("---end mem access---");
+		$display("---end mem access---");
 		
-		$strobe("---begin write back---");
-		$strobe("i_counter = %0h", i_counter);
-		$strobe("time is %0t",$time);
-		$strobe("mem_wb_debug_pc = %0h", mem_wb_debug_pc);
-        $strobe("mem_wb_debug_inst = %0h", mem_wb_debug_inst);
-		$strobe("i_mem_out = %0h", mem_wb_mem_out);
-        $strobe("i_rd_num = %0h", mem_wb_rd_num);
-        $strobe("i_alu_out = %0h", mem_wb_alu_out);
-        $strobe("i_op_type = %0h", mem_wb_op_type);
-        $strobe("rd_num = %0h", w_rd_num);
-        $strobe("rd = %0h", w_rd);
+		$display("---begin write back---");
+		$display("i_counter = %0h", i_counter);
+		$display("time is %0t",$time);
+		$display("mem_wb_debug_pc = %0h", mem_wb_debug_pc);
+        $display("mem_wb_debug_inst = %0h", mem_wb_debug_inst);
+		$display("i_mem_out = %0h", mem_wb_mem_out);
+        $display("i_rd_num = %0h", mem_wb_rd_num);
+        $display("i_alu_out = %0h", mem_wb_alu_out);
+        $display("i_op_type = %0h", mem_wb_op_type);
+        $display("rd_num = %0h", w_rd_num);
+        $display("rd = %0h", w_rd);
         decode_inst(mem_wb_debug_inst);
-		$strobe("---end write back---");
+		$display("---end write back---");
 	end
 	
 	task decode_inst(input[31:0] i_inst);
@@ -392,102 +392,102 @@ module verilog_riscv(input[31:0] i_counter,
 			    `BRANCH: begin
 					case (i_inst[14:12])
 						`BEQ: begin
-							$strobe("instruction BEQ");
+							$display("instruction BEQ");
 						end
 						`BNE: begin
-							$strobe("instruction BNE");
+							$display("instruction BNE");
 						end
 						`BLT: begin
-							$strobe("instruction BLT");	
+							$display("instruction BLT");	
 						end
 						`BLTU: begin
-							$strobe("instruction BLTU");	
+							$display("instruction BLTU");	
 						end
 						`BGE: begin
-							$strobe("instruction BGE");
+							$display("instruction BGE");
 						end
 						`BGEU: begin
-							$strobe("instruction BGE");
+							$display("instruction BGE");
 						end
 					endcase
 				end
 				`OPIMM: begin
 					case (i_inst[14:12])
 						`ADDI: begin
-							$strobe("instruction ADDI");
+							$display("instruction ADDI");
 						end
 						`SLTI: begin
-							$strobe("instruction SLTI");
+							$display("instruction SLTI");
 						end
 						`SLTIU: begin
-							$strobe("instruction SLTIU");
+							$display("instruction SLTIU");
 						end
 						`ANDI: begin
-							$strobe("instruction ANDI");
+							$display("instruction ANDI");
 						end
 						`ORI: begin
-							$strobe("instruction ORI");
+							$display("instruction ORI");
 						end
 						`XORI: begin
-							$strobe("instruction XORI");
+							$display("instruction XORI");
 						end
 						`SLLI: begin
-							$strobe("instruction SLLI");
+							$display("instruction SLLI");
 						end
 						`SRLISRAI: begin
-							if (i_inst[31:25] == `SRLI)	$strobe("instruction SRLI");
-							else if (i_inst[31:25] == `SRAI) $strobe("instruction SRAI");
+							if (i_inst[31:25] == `SRLI)	$display("instruction SRLI");
+							else if (i_inst[31:25] == `SRAI) $display("instruction SRAI");
 						end
 					endcase
 				end
 				`OP: begin
 					case (i_inst[14:12])
 						`ADDSUB: begin
-							if (i_inst[31:25] == `ADD) $strobe("instruction ADD");
-							else if (i_inst[31:25] == `SUB) $strobe("instruction SUB");
+							if (i_inst[31:25] == `ADD) $display("instruction ADD");
+							else if (i_inst[31:25] == `SUB) $display("instruction SUB");
 						end
 						`SLT: begin
-							$strobe("instruction SLT");
+							$display("instruction SLT");
 						end
 						`SLTU: begin
-							$strobe("instruction SLTU");
+							$display("instruction SLTU");
 						end
 						`AND: begin
-							$strobe("instruction AND");
+							$display("instruction AND");
 						end
 						`OR: begin
-							$strobe("instruction OR");
+							$display("instruction OR");
 						end
 						`XOR: begin
-							$strobe("instruction XOR");
+							$display("instruction XOR");
 						end
 						`SLL: begin
-							$strobe("instruction SLL");
+							$display("instruction SLL");
 						end
 						`SRLSRA: begin
-							$strobe("instruction SRLSRA");
-							if (i_inst[31:25] == `SRL) $strobe("instruction SRL");
-						else if (i_inst[31:25] == `SRA) $strobe("instruction SRA");
+							$display("instruction SRLSRA");
+							if (i_inst[31:25] == `SRL) $display("instruction SRL");
+						else if (i_inst[31:25] == `SRA) $display("instruction SRA");
 						end
 					endcase
 				end
 				`JAL: begin
-					$strobe("instruction JAL");
+					$display("instruction JAL");
 				end
 				`JALR: begin
-					$strobe("instruction JALR");
+					$display("instruction JALR");
 				end
 				`LUI: begin
-					$strobe("instruction LUI");
+					$display("instruction LUI");
 				end
 				`AUIPC: begin
-					$strobe("instruction AUIPC");
+					$display("instruction AUIPC");
 				end
 				`LOAD: begin
-					$strobe("instruction LOAD");
+					$display("instruction LOAD");
 				end
 				`STORE: begin
-					$strobe("instruction STORE");
+					$display("instruction STORE");
 				end		
 			endcase
 		end  
