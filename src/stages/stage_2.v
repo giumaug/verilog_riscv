@@ -29,10 +29,19 @@ module stage_2(input i_rst,
                output reg[11:0] imm_12_b,
                output reg[19:0] imm_20_i,
                output reg[11:0] imm_12_s);
-               
+                                                  
+    wire[6:0] _opcode = i_inst[6:0];
+    wire[2:0] _func_3 = i_inst[14:12];
+    wire[6:0] _func_7 = i_inst[31:25];
+    wire[11:0] _imm_12_i = i_inst[31:20];
+    wire[19:0] _imm_20 = {i_inst[31], i_inst[19:12], i_inst[20], i_inst[30:21]};
+    wire[11:0] _imm_12_b = {i_inst[31], i_inst[7], i_inst[30:25], i_inst[11:8]};
+    wire[19:0] _imm_20_i = {i_inst[31:12]};
+    wire[11:0] _imm_12_s = {i_inst[31:25], i_inst[11:7]}; 
+	
 	wire[4:0] i_reg_num_1 = i_inst[19:15];
 	wire[4:0] i_reg_num_2 = i_inst[24:20];
-	wire[6:0] i_opcode = i_inst[6:0];
+	//wire[6:0] i_opcode = i_inst[6:0];
 	wire[4:0] _rd_num = i_inst[11:7];
 	wire[31:0] _rs_1;
 	wire[31:0] _rs_2;
@@ -65,21 +74,21 @@ module stage_2(input i_rst,
 		$strobe("time is %0t",$time);
 		$strobe("---end decode---");  
 		if (_stall == 0) begin
-		    //$strobe("non stalling");
+			//$strobe("non stalling");
 			rd_num = _rd_num;
-			opcode = i_inst[6:0]; 
-			func_7 = i_inst[31:25];
-			func_3 = i_inst[14:12];
-			imm_12_i = i_inst[31:20];
-			imm_20 = {i_inst[31], i_inst[19:12], i_inst[20], i_inst[30:21]};
-			imm_12_b = {i_inst[31], i_inst[7], i_inst[30:25], i_inst[11:8]};
-			imm_20_i = {i_inst[31:12]};
-			imm_12_s = {i_inst[31:25], i_inst[11:7]};
+			opcode = _opcode;
+			func_7 = _func_7;
+			func_3 = _func_3; 
+			imm_12_i = _imm_12_i;
+			imm_20 = _imm_20;
+			imm_12_b = _imm_12_b;
+			imm_20_i = _imm_20_i;
+			imm_12_s = _imm_12_s;
 			pc = i_pc;
 			rs_1 = _rs_1;
 	        rs_2 = _rs_2;
 	        b_pc = _b_pc;
-	        b_taken = _b_taken;
+	        b_taken = _b_taken;	        
 		end
 		else begin
 			//$strobe("stalling");
@@ -102,14 +111,14 @@ module stage_2(input i_rst,
 	end
 	
 	branch_unit branch_unit_0(.i_pc(i_pc),
-							  .i_opcode(opcode),
-                              .i_func_3(func_3),
-                              .i_func_7(func_7),
-			                  .i_imm_12_i(imm_12_i),
-                              .i_imm_20(imm_20),
-                              .i_imm_12_b(imm_12_b),
-                              .i_rs_1(rs_1),
-                              .i_rs_2(rs_2),
+							  .i_opcode(_opcode),
+                              .i_func_3(_func_3),
+                              .i_func_7(_func_7),
+			                  .i_imm_12_i(_imm_12_i),
+                              .i_imm_20(_imm_20),
+                              .i_imm_12_b(_imm_12_b),
+                              .i_rs_1(_rs_1),
+                              .i_rs_2(_rs_2),
 			                  .b_taken(_b_taken),
                               .b_pc(_b_pc));
 
@@ -122,7 +131,7 @@ module stage_2(input i_rst,
 								  .rs_1(_rs_1),
 					              .rs_2(_rs_2));
 					              
-	data_hazard_unit data_hazard_unit_0(.i_opcode(i_opcode),
+	data_hazard_unit data_hazard_unit_0(.i_opcode(_opcode),
 	                                    .i_reg_num_1(i_reg_num_1),
 	                                    .i_reg_num_2(i_reg_num_2),
 	                                    .i_id_ex_rd_num(i_id_ex_rd_num),
