@@ -26,7 +26,10 @@ module inst_cache #(parameter CACHE_SIZE =  `_INST_CACHE_SIZE,
 			          mem_cell[i_address + 1 - CACHE_OFFSET], 
 			          mem_cell[i_address - CACHE_OFFSET]};
 		end else if (i_op_type == 1) begin
-			mem_cell[i_address - CACHE_OFFSET] <= i_val;
+			mem_cell[i_address - CACHE_OFFSET] <= i_val[7:0];
+			mem_cell[i_address + 1 - CACHE_OFFSET] <= i_val[15:8];
+			mem_cell[i_address + 2 - CACHE_OFFSET] <= i_val[23:16];
+			mem_cell[i_address + 3 - CACHE_OFFSET] <= i_val[31:24];
             o_val <= 31'bx;
 		end
 	end

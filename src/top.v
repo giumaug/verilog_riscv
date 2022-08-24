@@ -21,6 +21,6 @@ module top();
 	always @(posedge(clk)) begin
 	    if (rst == 1) rst <= 0;
 		counter <= counter + 1;
-		if (counter == 100) $finish();
+		if (counter == 1000) $finish();
     end
 endmodule

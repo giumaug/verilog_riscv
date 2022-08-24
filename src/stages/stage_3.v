@@ -44,6 +44,11 @@ module stage_3(input[31:0] i_pc,
 						//$strobe("instruction ADDI");
 						//alu_out = i_rs_1 + {{20{i_imm_12_i[11]}}, i_imm_12_i};
 						alu_out = i_rs_1 + tmp_1;
+						$display("time is %0t",$time);
+						$display("iii_rs_1 = %0h", i_rs_1);
+						$display("tmp_1 = %0h", tmp_1);
+						$display("alu_out = %0h", alu_out);
+						
 					end
 					`SLTI: begin
 						//$strobe("instruction SLTI");
