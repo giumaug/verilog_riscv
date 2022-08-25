@@ -31,6 +31,17 @@ module data_cache #(parameter CACHE_SIZE =  `_DATA_CACHE_SIZE,
 			mem_cell[i_address + 2 - CACHE_OFFSET] <= i_val[23:16];
 			mem_cell[i_address + 3 - CACHE_OFFSET] <= i_val[31:24];
 			o_val <= 31'bx;
+			if (i_address >= 492 && i_address <= 520) begin
+			    $strobe("--------------------memory dump--------------------");
+			    $strobe("value_1 = %0h", mem_cell[0]);
+			    $strobe("value_2 = %0h", mem_cell[4]);
+			    $strobe("value_3 = %0h", mem_cell[8]);
+			    $strobe("value_4 = %0h", mem_cell[12]);
+			    $strobe("value_5 = %0h", mem_cell[16]);
+			    $strobe("value_6 = %0h", mem_cell[20]);
+			    $strobe("value_7 = %0h", mem_cell[24]);
+			    $strobe("---------------------------------------------------");
+			end
 		end
 	end
 endmodule
