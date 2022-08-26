@@ -1,3 +1,5 @@
+`define LED_ADDRESS			                    'hffff
+
 `define BOOT_ADDRESS 							'h12c
 `define STACK_ADDRESS                           'h2ec
 

@@ -15,8 +15,9 @@
 module verilog_riscv(input[31:0] i_counter,
                      input i_rst,
                      input i_clk,
-			         output[3:0] leds);
-			         
+			         output reg[3:0] leds);
+			     
+    wire[3:0] _leds;    
 	wire[31:0] i_if_id_pc;
 	wire[31:0] i_if_id_inst;
 	wire[31:0] if_id_pc;
@@ -265,7 +266,19 @@ module verilog_riscv(input[31:0] i_counter,
                                           .i_val_1(32'b0),
                                           .i_op_type_1(1'b0),
                                           .o_val_0(i_val_from_mem_ctr_0),
-                                          .o_val_1(i_val_from_mem_ctr_1));
+                                          .o_val_1(i_val_from_mem_ctr_1),
+                                          o_leds(_leds));
+                                          
+    always@(i_rst) begin
+		if (i_rst == 1) begin
+			_leds <= 0;
+		end
+	end
+	
+	always@(_leds) begin
+        leds <= _leds;
+	end                                       
+                                                                            
     //Per ogni stage stampo la relazione ingresso/uscita. Considero l'uscita disponibile a t+T con t = istante
     //in cui arriva il fronte di salita del clock.
     //i_counter conta il numero di elaborazioni eseguita dallo stage1. Il conteggio parte da 1.                                   

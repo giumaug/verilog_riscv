@@ -41,7 +41,6 @@ module stage_2(input i_rst,
 	
 	wire[4:0] i_reg_num_1 = i_inst[19:15];
 	wire[4:0] i_reg_num_2 = i_inst[24:20];
-	//wire[6:0] i_opcode = i_inst[6:0];
 	wire[4:0] _rd_num = i_inst[11:7];
 	wire[31:0] _rs_1;
 	wire[31:0] _rs_2;
@@ -50,31 +49,7 @@ module stage_2(input i_rst,
 	wire _stall;
 	
 	always @(*) begin
-		$strobe("---inside decode---");
-		$strobe("i_reg_num_1 = %0h", i_reg_num_1);
-		$strobe("i_reg_num_2 = %0h", i_reg_num_2);
-        $strobe("i_reg_op = %0h", i_reg_op);
-		$strobe("i_w_rd = %0h", i_w_rd);
-        $strobe("i_w_rd_num= %0h", i_w_rd_num);
-        $strobe("i_inst = %0h", i_inst);
-        $strobe("i_pc = %0h", i_pc);
-        $strobe("b_taken = %0h", b_taken);
-        $strobe("b_pc = %0h", b_pc);
-        $strobe("rs_1 = %0h", rs_1);
-        $strobe("rs_2 = %0h", rs_2);
-		$strobe("rd_num = %0h", rd_num);
-		$strobe("opcode = %0h", opcode);
-        $strobe("func_7 = %0h", func_7);
-        $strobe("func_3 = %0h", func_3);
-        $strobe("imm_12_i = %0h", imm_12_i);
-        $strobe("imm_20 = %0h", imm_20);
-        $strobe("imm_12_b = %0h", imm_12_b);
-        $strobe("imm_20_i = %0h", imm_20_i);
-		$strobe("imm_12_s = %0h", imm_12_s);
-		$strobe("time is %0t",$time);
-		$strobe("---end decode---");  
 		if (_stall == 0) begin
-			//$strobe("non stalling");
 			rd_num = _rd_num;
 			opcode = _opcode;
 			func_7 = _func_7;
@@ -91,7 +66,6 @@ module stage_2(input i_rst,
 	        b_taken = _b_taken;	        
 		end
 		else begin
-			//$strobe("stalling");
 			rd_num = 0;
 			opcode = 0; 
 			func_7 = 0;
@@ -136,32 +110,5 @@ module stage_2(input i_rst,
 	                                    .i_reg_num_2(i_reg_num_2),
 	                                    .i_id_ex_rd_num(i_id_ex_rd_num),
 	                                    .i_ex_mem_rd_num(i_ex_mem_rd_num),
-	                                    .stall(_stall));
-			
-/*		           
-    always@(opcode, rs_1, rs_2, i_reg_op) begin
-        $strobe("---begin decode---");
-        $strobe("i_reg_op = %0h", i_reg_op);
-		$strobe("i_w_rd = %0h", i_w_rd);
-        $strobe("i_w_rd_num= %0h", i_w_rd_num);
-        $strobe("i_inst = %0h", i_inst);
-        $strobe("i_pc = %0h", i_pc);
-        $strobe("b_taken = %0h", b_taken);
-        $strobe("b_pc = %0h", b_pc);
-        $strobe("rs_1 = %0h", rs_1);
-        $strobe("rs_2 = %0h", rs_2);
-		$strobe("rd_num = %0h", rd_num);
-		$strobe("opcode = %0h", opcode);
-        $strobe("func_7 = %0h", func_7);
-        $strobe("func_3 = %0h", func_3);
-        $strobe("imm_12_i = %0h", imm_12_i);
-        $strobe("imm_20 = %0h", imm_20);
-        $strobe("imm_12_b = %0h", imm_12_b);
-        $strobe("imm_20_i = %0h", imm_20_i);
-		$strobe("imm_12_s = %0h", imm_12_s);
-		$strobe("time is %0t",$time);
-		$strobe("---end decode---");  
-    end
-*/
-					              
+	                                    .stall(_stall));					              
 endmodule

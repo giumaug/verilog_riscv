@@ -30,16 +30,6 @@ module data_hazard_unit(input[6:0] i_opcode,
 			end
 			default : stall = 0;
 		endcase
-		
-		//$strobe("-------stall unit----------");
-		//$strobe("i_opcode= %d",i_opcode);
-        //$strobe("i_reg_num_1= %d",i_reg_num_1);
-        //$strobe("i_reg_num_2= %d",i_reg_num_2);
-        //$strobe("i_id_ex_rd_num= %d",i_id_ex_rd_num);
-        //$strobe("i_ex_mem_rd_num= %d",i_ex_mem_rd_num);
-		//$strobe("stall is %d", stall);
-		//$strobe("time is %0t",$time);
-		//$strobe("--------------------------");
 	end
 	
 	function hazard;

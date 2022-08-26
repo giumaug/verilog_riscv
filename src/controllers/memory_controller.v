@@ -13,7 +13,15 @@ module memory_controller(input i_rst,
                          input[31:0] i_val_1,
                          input i_op_type_1,
                          output[31:0] o_val_0,
-						 output[31:0] o_val_1);
+						 output[31:0] o_val_1,
+						 output reg[3:0] o_leds);
+						 
+	always @(i_address_0, i_val_0, i_op_type_0) begin
+	    if (i_op_type_0 == 1 and i_address_0 == `define `LED_ADDRESS)
+	    begin
+	        o_leds = i_val_0;--------qui verificare se combinatorio anche quando non viene chiamato..problema generale!!!!!!!!!!!!!!
+	    end
+	end					 
 
 	//data cache
 	data_cache #(.CACHE_SIZE(`_DATA_CACHE_SIZE), 

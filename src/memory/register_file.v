@@ -34,12 +34,6 @@ module register_file(input i_rst,
 		end
         if (i_op == 1) begin
     		registers[i_w_reg_num] <= i_w_val;
-    		if (i_w_reg_num == 8)
-			begin
-				$strobe("i_w_reg_num = %0h", i_w_reg_num);
-				$strobe("alert on 8 = %0h", i_w_val);
-				$strobe("time is %0t",$time);
-			end
 		end
     end
 endmodule

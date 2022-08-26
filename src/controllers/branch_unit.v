@@ -34,7 +34,6 @@ module branch_unit(input[31:0] i_pc,
 				if (i_imm_20[19] == 0) b_pc = i_pc + `ABS(tmp_2, 32);
 				else b_pc =  i_pc - `ABS(tmp_2, 32);
 				b_taken = 1;
-				$display("instruction JAL");
 			   end
 			`JALR: begin
 				//if (i_imm_12_i[11] == 0) b_pc = (i_rs_1 + {{20{i_imm_12_i[11]}}, i_imm_12_i}) & 4094;
@@ -42,11 +41,6 @@ module branch_unit(input[31:0] i_pc,
 				if (i_imm_12_i[11] == 0) b_pc = (i_rs_1 + tmp_3) & 4094;
 				else b_pc = (i_rs_1 - tmp_4) & 4094;
 				b_taken = 1;
-				$display("instruction JALR---");
-				$display("b_pc = %0h", b_pc);
-				$display("b_taken = %0h", b_taken);
-				$display("i_imm_12_i = %0h", i_imm_12_i);
-				$display("i_rs_1 = %0h", i_rs_1);
 			end
 			`BRANCH: begin
 				//if (i_imm_12_b[11] == 0) b_pc = i_pc + {{19{i_imm_12_b[11]}}, {i_imm_12_b, 1'b0}};
@@ -57,34 +51,26 @@ module branch_unit(input[31:0] i_pc,
 					`BEQ: begin
 				   		if (i_rs_1 == i_rs_2) b_taken = 1;
 				       	else b_taken = 0;
-				       	$display("instruction BEQ");
 				   	end
                   	`BNE: begin
                    		if (i_rs_1 != i_rs_2) b_taken = 1;
                       	else b_taken = 0;
-                  		$display("instruction BNE");
                 	end
                   	`BLT: begin
 						if (`SIGNED(i_rs_1) < `SIGNED(i_rs_2)) b_taken = 1;
 						else b_taken = 0;
-						$display("instruction BLT---");
-						$display("i_rs_1 = %0h", i_rs_1);
-						$display("i_rs_2 = %0h", i_rs_2);
 					end
 					`BLTU: begin
 						if (`ABS(i_rs_1, 32) < `ABS(i_rs_2, 32)) b_taken = 1;
 					   	else b_taken = 0;
-						$display("instruction BLTU");	
 					end
 					`BGE: begin
 						if (`SIGNED(i_rs_1) > `SIGNED(i_rs_2)) b_taken = 1;
 						else b_taken = 0;
-						$display("instruction BGE");
 					end
 					`BGEU: begin
 						if (`ABS(i_rs_1, 32) > `ABS(i_rs_2, 32)) b_taken = 1;
 						else b_taken = 0;
-						$display("instruction BGE");
 					end
 				endcase
 			end

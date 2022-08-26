@@ -1,22 +1,3 @@
-//module if_id (input clk,
-//              input i_pc,
-//              input i_instr,
-//              output o_pc,
-//              output o_instr);
-//            
-//	reg[31:0] pc = 0;
-//	reg[31:0] instr = 0;
-//	
-//	assign o_pc = pc;
-//	assign o_instr = o_instr;
-//	
-//	always @(posedge(clk))
-//    begin
-//		pc <= i_pc;
-//		instr <= i_instr;
-//    end
-//endmodule
-
 module if_id(input rst,
 			 input clk,
 			 input[31:0] i_pc,
