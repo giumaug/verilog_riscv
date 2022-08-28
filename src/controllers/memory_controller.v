@@ -14,14 +14,26 @@ module memory_controller(input i_rst,
                          input i_op_type_1,
                          output[31:0] o_val_0,
 						 output[31:0] o_val_1,
-						 output reg[3:0] o_leds);
+						 output[3:0] o_leds);
+						 
+	reg[3:0] leds;
+	
+	always@(i_rst) begin
+		if (i_rst == 1) begin
+			leds <= `LED_DEFAULT;
+		end
+	end
 						 
 	always @(i_address_0, i_val_0, i_op_type_0) begin
-	    if (i_op_type_0 == 1 and i_address_0 == `define `LED_ADDRESS)
+	    if (i_op_type_0 == 1 && i_address_0 == `LED_ADDRESS)
+	    //if (i_op_type_0 == 1)
 	    begin
-	        o_leds = i_val_0;--------qui verificare se combinatorio anche quando non viene chiamato..problema generale!!!!!!!!!!!!!!
+	        leds <= i_val_0;
+	        $display("---leds values = %0h", i_val_0);
 	    end
-	end					 
+	end
+	
+	assign o_leds = leds;				 
 
 	//data cache
 	data_cache #(.CACHE_SIZE(`_DATA_CACHE_SIZE), 
@@ -40,5 +52,4 @@ module memory_controller(input i_rst,
                          .i_val(i_val_1),
                          .i_op_type(i_op_type_1),
 					     .o_val(o_val_1));
-
 endmodule     

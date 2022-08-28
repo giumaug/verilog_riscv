@@ -267,14 +267,8 @@ module verilog_riscv(input[31:0] i_counter,
                                           .i_op_type_1(1'b0),
                                           .o_val_0(i_val_from_mem_ctr_0),
                                           .o_val_1(i_val_from_mem_ctr_1),
-                                          o_leds(_leds));
+                                          .o_leds(_leds));
                                           
-    always@(i_rst) begin
-		if (i_rst == 1) begin
-			_leds <= 0;
-		end
-	end
-	
 	always@(_leds) begin
         leds <= _leds;
 	end                                       

@@ -72,7 +72,6 @@ module stage_4(input[31:0] i_rs_2,
 				addr_to_mem_ctr = 32'b0;
 				val_to_mem_ctr = 32'b0;
 				op_to_mem_ctr = 1'b0;
-				
 			end
 		endcase
 	end
