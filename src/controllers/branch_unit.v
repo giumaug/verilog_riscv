@@ -15,7 +15,12 @@ module branch_unit(input[31:0] i_pc,
                    input[31:0] i_rs_2,
 			       output reg b_taken,
                    output reg[31:0] b_pc);
-     
+                   
+    wire[31:0] cond_eq_op_1;
+    wire[31:0] cond_eq_op_2;
+    wire[31:0] cond_gt_op_1;
+    wire[31:0] cond_gt_op_2;
+    
     wire[20:0] tmp_1 = {i_imm_20, 1'b0};
     wire[31:0] tmp_2 = `SIGN_EXTEND(tmp_1, 21, 32);
     wire[31:0] tmp_3 = `SIGN_EXTEND(i_imm_12_i, 12, 32);
@@ -29,22 +34,16 @@ module branch_unit(input[31:0] i_pc,
 			end
 			`JAL: begin
 				//Note: if imm is two complement negative number, the positive value is zeroExtend( ~ (imm - 1))
-				//if (i_imm_20[19] == 0) b_pc = i_pc + {{11{i_imm_20[19]}}, {i_imm_20, 1'b0}};
-				//else b_pc =  i_pc - ( ~ ({{11{i_imm_20[19]}}, {i_imm_20, 1'b0}} - 1));
 				if (i_imm_20[19] == 0) b_pc = i_pc + `ABS(tmp_2, 32);
 				else b_pc =  i_pc - `ABS(tmp_2, 32);
 				b_taken = 1;
 			   end
 			`JALR: begin
-				//if (i_imm_12_i[11] == 0) b_pc = (i_rs_1 + {{20{i_imm_12_i[11]}}, i_imm_12_i}) & 4094;
-				//else b_pc = (i_rs_1 - ( ~ ({{20{i_imm_12_i[11]}}, i_imm_12_i} - 1))) & 4094;
 				if (i_imm_12_i[11] == 0) b_pc = (i_rs_1 + tmp_3) & 4094;
 				else b_pc = (i_rs_1 - tmp_4) & 4094;
 				b_taken = 1;
 			end
 			`BRANCH: begin
-				//if (i_imm_12_b[11] == 0) b_pc = i_pc + {{19{i_imm_12_b[11]}}, {i_imm_12_b, 1'b0}};
-				//else b_pc =  i_pc - ( ~ ({{19{i_imm_12_b[11]}}, {i_imm_12_b, 1'b0}} - 1));
 				if (i_imm_12_b[11] == 0) b_pc = i_pc + `ABS(tmp_6, 32);
 				else b_pc = i_pc - `ABS(tmp_6, 32);
 				case (i_func_3)
