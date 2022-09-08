@@ -594,8 +594,9 @@
 `define ALU_XOR                                 4'b0100
 `define ALU_SLL                                 4'b0101
 `define ALU_SLT                                 4'b0110
-`define ALU_SRL                                 4'b0111
-`define ALU_SRA                                 4'b1000 
+`define ALU_SLTU                                4'b0111
+`define ALU_SRL                                 4'b1000
+`define ALU_SRA                                 4'b1001 
 
 
 
