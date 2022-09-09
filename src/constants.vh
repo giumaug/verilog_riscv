@@ -598,6 +598,17 @@
 `define ALU_SRL                                 4'b1000
 `define ALU_SRA                                 4'b1001 
 
+// MEM OP
+`define READ_32                                 3'b000
+`define READ_16_S                               3'b001
+`define READ_16_U                               3'b010
+`define READ_8_S                                3'b011
+`define READ_8_U                                3'b100
+`define WRITE_32                                3'b101
+`define WRITE_16                                3'b110
+`define WRITE_8                                 3'b111
+
+
 
 
 

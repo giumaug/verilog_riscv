@@ -42,6 +42,7 @@ module stage_2(input i_rst,
 	wire[4:0] i_reg_num_1 = i_inst[19:15];
 	wire[4:0] i_reg_num_2 = i_inst[24:20];
 	wire[4:0] _rd_num = i_inst[11:7];
+	wire[31:0] _pc = i_pc;
 	wire[31:0] _rs_1;
 	wire[31:0] _rs_2;
 	wire[31:0] _b_pc;
@@ -144,10 +145,15 @@ module stage_2(input i_rst,
 				endcase
 			end
 			`JAL: begin
-				
+			    //Note: if imm is two complement negative number, the positive value is zeroExtend( ~ (imm - 1))
+				if (_imm_20[19] == 0) _b_pc = _pc + `ABS(tmp_2, 32);
+				else _b_pc = _pc - `ABS(tmp_2, 32);
+				_b_taken = 1;
 			end
 			`JALR: begin
-				
+			    if (_imm_12_i[11] == 0) _b_pc = (i_rs_1 + tmp_3) & 4094;
+				else _b_pc = (i_rs_1 - tmp_4) & 4094;
+				_b_taken = 1;-----------------------------qui mettere a fattore comune add
 			end
 			`LUI: begin
 				op_type = 0;
@@ -162,35 +168,48 @@ module stage_2(input i_rst,
 			    alu_op = `ALU_ADD;
 			end
 			`LOAD: begin
+			    op_type = 1;
+				alu_op_1 = i_rs_1;
+				alu_op_2 = tmp_1;
+				alu_op = `ALU_ADD;
 				case (i_func_3)
 					`LB: begin
-						op_type = 3'b010;
+						op_mem = `READ_8_S;
 					end
 					`LH: begin
-						op_type = 3'b011;
+						op_mem = `READ_16_S;
 					end
 					`LW: begin
-						op_type = 3'b001;
+						op_mem = `READ_32;
 					end
 					`LBU: begin
-						op_type = 3'b100;
+						op_mem = WRITE_8_U
 					end
 					`LHU: begin
-						op_type = 3'b101;
+						op_mem = WRITE_U
 					end
 				endcase
+			end
+			`STORE: begin
+			    op_type = 1;
 				alu_op_1 = i_rs_1;
 			    alu_op_2 = tmp_1;
 			    alu_op = `ALU_ADD;
-			end
-			`STORE: begin
-				op_type = 1;
-				alu_op_1 = i_rs_1;-------qui capire che fare con store!!!
-			    alu_op_2 = tmp_1;
-			    alu_op = `ALU_ADD;
+			    case (i_func_3)
+					`SB: begin
+					    op_mem = `WRITE_8;	
+					end
+					`SH: begin
+			            op_mem = `WRITE_16;
+					end
+					`SW: begin
+					    op_mem = `WRITE_32;	
+					end
+				endcase
 			end
 			default: begin
 				op_type = 0;
+				op_mem = 0;
 				alu_op_1 = 32'd0;
 			    alu_op_2 = 32'd0;
 			    alu_op = `ALU_ADD;
