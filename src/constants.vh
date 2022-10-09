@@ -608,6 +608,10 @@
 `define WRITE_16                                3'b110
 `define WRITE_8                                 3'b111
 
+`define MEM_OP 									1'b1;
+`define ALU_OP 									1'b0;
+
+
 
 
 
