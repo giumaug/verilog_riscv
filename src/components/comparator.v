@@ -1,4 +1,3 @@
-
 module comparator(input sign i_sign,
                input[31:0] a,
                input[31:0] b,
@@ -20,3 +19,17 @@ module comparator(input sign i_sign,
 	assign lt = c;
 	
 endmodule	
+
+-----------
+module comparator (input[7:0]  In1,
+       input [7:0] In2,
+       output Gt,
+       output Lt,
+       output Eq); 
+
+    always @(*) begin 
+     Gt <= ( In1 > In2 )? 1'b1 : 1'b0; 
+     Lt <= ( In1 < In2 )? 1'b1 : 1'b0; 
+     Eq <= ( In1 == In2)? 1'b1 : 1'b0; 
+    end 
+    endmodule
