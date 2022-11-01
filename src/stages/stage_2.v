@@ -64,6 +64,13 @@ module stage_2(input i_rst,
 	wire[31:0] imm_12_b_s_ext = SIGN_EXTEND(imm_12_b, 12, 32);
 	wire[31:0] lui_auipc = {i_imm_20_i, 12'b0};
 	
+	wire[12:0] imm_13_b = {imm_12_b_s, 0};
+	wire[31:0] imm_13_b_s_ext = ...
+	
+	wire comp_gt;
+	wire comp_lt;
+	wire comp_eq;
+	
 	always @(*) begin
 		case (opcode)
 			`OPIMM: begin
@@ -228,29 +235,29 @@ module stage_2(input i_rst,
 				endcase
 			end
 			
-			comparator
-			https://eevibes.com/digital-logic-design/how-to-design-a-4-bit-magnitude-comparator-circuit/
-			comparator by sub
-			https://www.edaboard.com/threads/how-to-compare-two-data-in-2s-complement-form.40814/
-			
 			`BRANCH: begin
-				if (i_imm_12_b[11] == 0) b_pc = i_pc + `ABS(tmp_6, 32);
-				else b_pc = i_pc - `ABS(tmp_6, 32);
-				
-				b_pc = i_pc + imm_12_b_s_ext;
+				adder_0_op_1 = i_pc;
+				adder_0_op_2 = imm_13_b_s_ext;
 				
 				case (i_func_3)
 					`BEQ: begin
-				   		if (i_rs_1 == i_rs_2) b_taken = 1;
-				       	else b_taken = 0;
+				       	comp_op_1 = i_rs_1;
+				       	comp_op_2 = i_rs_2;
+				       	comp_sign = 0;
+				       	b_taken = comp_eq;
 				   	end
                   	`BNE: begin
-                   		if (i_rs_1 != i_rs_2) b_taken = 1;
-                      	else b_taken = 0;
+                      	comp_op_1 = i_rs_1;
+				       	comp_op_2 = i_rs_2;
+				       	comp_sign = 0;
+				       	b_taken = ~comp_eq;
                 	end
                   	`BLT: begin
-						if (`SIGNED(i_rs_1) < `SIGNED(i_rs_2)) b_taken = 1;
-						else b_taken = 0;
+						comp_op_1 = i_rs_1;
+				       	comp_op_2 = i_rs_2;
+				       	comp_sign = 1;
+				       	b_taken = comp_lt;
+						
 					end
 					`BLTU: begin
 						if (`ABS(i_rs_1, 32) < `ABS(i_rs_2, 32)) b_taken = 1;
@@ -321,19 +328,13 @@ module stage_2(input i_rst,
 	adder adder_0(.i_in_1(adder_0_op_1),
 		          .i_in_2(adder_0_op_2),
 	              .out(b_pc));
-
-	
-	branch_unit branch_unit_0(.i_pc(i_pc),
-							  .i_opcode(_opcode),
-                              .i_func_3(_func_3),
-                              .i_func_7(_func_7),
-			                  .i_imm_12_i(_imm_12_i),
-                              .i_imm_20(_imm_20),
-                              .i_imm_12_b(_imm_12_b),
-                              .i_rs_1(_rs_1),
-                              .i_rs_2(_rs_2),
-			                  .b_taken(_b_taken),
-                              .b_pc(_b_pc));
+	              
+	comparator comparator_0(.i_in_1(comp_op_1),
+	                        .i_in_2(comp_op_2),
+	                        .i_sign(comp_sign),
+	                        .gt(comp_gt),
+	                        .lt(comp_lt),
+	                        .eq(comp_eq));
 
 	register_file register_file_0(.i_rst(i_rst),
 	                              .i_reg_num_1(i_reg_num_1),
