@@ -23,7 +23,12 @@ module stage_2(input i_rst,
                output reg[31:0] alu_op_2;
                output reg[3:0] alu_op
                output reg[2:0] mem_op,
-               output reg[2:0] alu_mem_op);
+               output reg[2:0] alu_mem_op
+               
+               
+               output reg[31:0] imm_12_ex  qui1!!!!
+               
+               );
                
                //output reg[31:0] rs_1,
                //output reg[31:0] rs_2,
@@ -50,8 +55,16 @@ module stage_2(input i_rst,
     wire[31:0] imm_12_i_ext;
     wire[31:0] imm_20_j_ext;
     wire[31:0] imm_12_b_ext; 
-    wire[31:0] imm_20_u_ext;
     wire[31:0] imm_12_s_ext;
+    
+    wire[11:0] imm_12;
+	wire[31:0] imm_12_ext;
+	
+	imm_12 = imm_12_i;
+	
+	
+	
+    
     
     
 	
@@ -73,10 +86,10 @@ module stage_2(input i_rst,
 	wire[31:0] imm_12_b_s_ext = SIGN_EXTEND(imm_12_b, 12, 32);
 	wire[31:0] lui_auipc = {i_imm_20_i, 12'b0};
 	
-	wire[12:0] imm_13_b = {imm_12_b_s, 0};
-	wire[31:0] imm_13_b_s_ext;
-	wire[11:0] _imm_12;
-	wire[31:0] _imm_12_s_ext;
+	//wire[12:0] imm_13_b = {imm_12_b_s, 0};
+	//wire[31:0] imm_13_b_s_ext;
+	//wire[11:0] _imm_12;
+	//wire[31:0] _imm_12_s_ext;
 	
 	wire comp_gt;
 	wire comp_lt;
@@ -210,8 +223,10 @@ module stage_2(input i_rst,
 			`LOAD: begin
 			    alu_mem_op = `MEM_OP;
 				alu_op_1 = `RS_1;
-				alu_op_2 = `IMM_12_I_S_EXT
+				alu_op_2 = `IMM_12_I_S_EXT //IMM_12
 				alu_op = `ALU_ADD;
+				imm_12 = imm_12_i; qui2!!!
+				
 				case (i_func_3)
 					`LB: begin
 						op_mem = `READ_8_S;
@@ -356,7 +371,7 @@ module stage_2(input i_rst,
 	                        .eq(comp_eq));
 	                        
 	sign_extend_12_32 sign_extend_12_32_0(.i_in(_imm_12), out(_imm_12_s_ext));
-	sign_extend_20_32 sign_extend_20_32_0(.i_in(imm_20_i), out(imm_20_i_s_ext));
+	sign_extend_20_32 sign_extend_20_32_0(.i_in(imm_20_j), out(imm_20_j_ext));
 	sign_extend_13_32 sign_extend_13_32_0(.i_in(imm_13_b), out(imm_13_b_s_ext));
 	
 
