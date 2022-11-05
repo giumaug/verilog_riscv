@@ -40,11 +40,20 @@ module stage_2(input i_rst,
     wire[6:0] opcode = i_inst[6:0];
     wire[2:0] func_3 = i_inst[14:12];
     wire[6:0] func_7 = i_inst[31:25];
-    wire[11:0] imm_12_i = i_inst[31:20];
-    wire[19:0] imm_20 = {i_inst[31], i_inst[19:12], i_inst[20], i_inst[30:21]};
-    wire[11:0] imm_12_b = {i_inst[31], i_inst[7], i_inst[30:25], i_inst[11:8]};
-    wire[19:0] imm_20_i = {i_inst[31:12]};
-    wire[11:0] imm_12_s = {i_inst[31:25], i_inst[11:7]}; 
+    
+    wire[11:0] imm_12_i = i_inst[31:20];ex
+    wire[19:0] imm_20_j = {i_inst[31], i_inst[19:12], i_inst[20], i_inst[30:21]};ex
+    wire[11:0] imm_12_b = {i_inst[31], i_inst[7], i_inst[30:25], i_inst[11:8]};ex
+    wire[19:0] imm_20_u = {i_inst[31:12]};no
+    wire[11:0] imm_12_s = {i_inst[31:25], i_inst[11:7]};ex
+    
+    wire[31:0] imm_12_i_ext;
+    wire[31:0] imm_20_j_ext;
+    wire[31:0] imm_12_b_ext; 
+    wire[31:0] imm_20_u_ext;
+    wire[31:0] imm_12_s_ext;
+    
+    
 	
 	wire[4:0] i_reg_num_1 = i_inst[19:15];
 	wire[4:0] i_reg_num_2 = i_inst[24:20];
@@ -65,7 +74,9 @@ module stage_2(input i_rst,
 	wire[31:0] lui_auipc = {i_imm_20_i, 12'b0};
 	
 	wire[12:0] imm_13_b = {imm_12_b_s, 0};
-	wire[31:0] imm_13_b_s_ext = ...
+	wire[31:0] imm_13_b_s_ext;
+	wire[11:0] _imm_12;
+	wire[31:0] _imm_12_s_ext;
 	
 	wire comp_gt;
 	wire comp_lt;
@@ -175,6 +186,8 @@ module stage_2(input i_rst,
 				alu_op = `ALU_ADD;
 			end
 			`JALR: begin
+				_imm_12 = imm_12_i;
+				imm_12_i_s_ext = _imm_12_s_ext;
 				adder_0_op_1 = i_rs_1;
 				adder_0_op_2 = _imm_12_i_s_ext  & 0xfffffffe;
 				b_taken = 1;
@@ -260,16 +273,22 @@ module stage_2(input i_rst,
 						
 					end
 					`BLTU: begin
-						if (`ABS(i_rs_1, 32) < `ABS(i_rs_2, 32)) b_taken = 1;
-					   	else b_taken = 0;
+						comp_op_1 = i_rs_1;
+				       	comp_op_2 = i_rs_2;
+				       	comp_sign = 0;
+				       	b_taken = comp_lt;
 					end
 					`BGE: begin
-						if (`SIGNED(i_rs_1) > `SIGNED(i_rs_2)) b_taken = 1;
-						else b_taken = 0;
+						comp_op_1 = i_rs_1;
+				       	comp_op_2 = i_rs_2;
+				       	comp_sign = 1;
+				       	b_taken = comp_gt;
 					end
 					`BGEU: begin
-						if (`ABS(i_rs_1, 32) > `ABS(i_rs_2, 32)) b_taken = 1;
-						else b_taken = 0;
+						comp_op_1 = i_rs_1;
+				       	comp_op_2 = i_rs_2;
+				       	comp_sign = 0;
+				       	b_taken = comp_gt;
 					end
 				endcase
 			end
@@ -335,6 +354,11 @@ module stage_2(input i_rst,
 	                        .gt(comp_gt),
 	                        .lt(comp_lt),
 	                        .eq(comp_eq));
+	                        
+	sign_extend_12_32 sign_extend_12_32_0(.i_in(_imm_12), out(_imm_12_s_ext));
+	sign_extend_20_32 sign_extend_20_32_0(.i_in(imm_20_i), out(imm_20_i_s_ext));
+	sign_extend_13_32 sign_extend_13_32_0(.i_in(imm_13_b), out(imm_13_b_s_ext));
+	
 
 	register_file register_file_0(.i_rst(i_rst),
 	                              .i_reg_num_1(i_reg_num_1),
